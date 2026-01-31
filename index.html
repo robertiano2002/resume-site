@@ -1,105 +1,195 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Резюме QA Engineer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Engineer | Resume</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --accent: #10B981;
-      --bg: #0F172A;
-      --text: #E5E7EB;
-      --muted: #94A3B8;
-    }
-
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: #0F172A;
+      color: #E5E7EB;
+      position: relative;
+      overflow-x: hidden;
     }
 
     .hero {
+      padding: 100px 5% 40px;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      height: 100vh;
-      padding: 0 10vw;
-      overflow: hidden;
+      z-index: 1;
     }
 
-    .hero h1 {
+    h1 {
       font-size: 48px;
-      font-weight: 700;
-      margin: 0 0 16px;
+      margin-bottom: 20px;
     }
 
-    .hero p {
-      font-size: 20px;
-      color: var(--muted);
-      max-width: 500px;
+    p {
+      font-size: 18px;
+      max-width: 600px;
+      color: #CBD5F5;
     }
 
-    .hero-actions {
-      margin-top: 32px;
+    .buttons {
+      margin-top: 30px;
       display: flex;
       gap: 16px;
     }
 
     .btn {
-      padding: 14px 28px;
-      border: none;
-      border-radius: 999px;
-      background-color: var(--accent);
+      background: #10B981;
       color: #0F172A;
+      padding: 12px 24px;
+      border-radius: 999px;
       font-weight: 600;
-      cursor: pointer;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      text-decoration: none;
+      transition: transform 0.3s ease;
     }
 
     .btn:hover {
-      box-shadow: 0 0 20px rgba(16,185,129,0.5);
       transform: translateY(-2px);
     }
 
-    .bg-pattern {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.03) 0%, transparent 60%),
-                        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03) 0%, transparent 60%);
-      background-size: cover;
+    .background-wave {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       z-index: 0;
     }
 
-    .hero > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 36px;
-      }
-      .hero p {
-        font-size: 16px;
-      }
+    svg path {
+      transition: transform 0.5s ease, filter 0.5s ease;
+      filter: brightness(1.2) contrast(1.2);
     }
   </style>
 </head>
 <body>
+<!-- ===== Background wave (replace old block) ===== -->
+<div class="background-wave" aria-hidden="true">
+  <svg id="bgWaveSVG" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice"
+       xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+    <defs>
+      <filter id="blurFilter" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="18"/>
+      </filter>
+      <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.04"/>
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0.02"/>
+      </linearGradient>
+    </defs>
+
+    <!-- three layered soft waves -->
+    <g filter="url(#blurFilter)" style="will-change: transform;">
+      <path id="wave1" fill="url(#g1)" d="M0,220 C320,120 720,320 1440,220 L1440,800 L0,800 Z"></path>
+      <path id="wave2" fill="#ffffff" fill-opacity="0.03" d="M0,140 C360,240 840,40 1440,140 L1440,800 L0,800 Z"></path>
+      <path id="wave3" fill="#10B981" fill-opacity="0.025" d="M0,180 C420,100 900,300 1440,180 L1440,800 L0,800 Z"></path>
+    </g>
+  </svg>
+</div>
+
+<style>
+  /* ensure wave is visible and under content */
+  .background-wave {
+    position: fixed;
+    inset: 0;
+    z-index: 0;              /* under content */
+    pointer-events: none;    /* doesn't capture clicks */
+    mix-blend-mode: normal;
+  }
+  .background-wave svg { display:block; width:100%; height:100vh; }
+  .background-wave path { transition: transform 0.25s linear; transform-origin: center; will-change: transform, filter; }
+</style>
+
+<script>
+  // Smooth wave parallax reacting to cursor
+  (function () {
+    const wave1 = document.getElementById('wave1');
+    const wave2 = document.getElementById('wave2');
+    const wave3 = document.getElementById('wave3');
+
+    let targetX = 0, targetY = 0;
+    let curX = 0, curY = 0;
+    const ease = 0.08; // lower = smoother/slower, higher = snappier
+    const maxX = 40;   // horizontal amplitude in px
+    const maxY = 20;   // vertical amplitude in px
+
+    function onMove(e) {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      // normalize to [-0.5..0.5], then scale
+      targetX = (e.clientX / w - 0.5);
+      targetY = (e.clientY / h - 0.5);
+    }
+
+    function onLeave() {
+      // return to center smoothly
+      targetX = 0;
+      targetY = 0;
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseleave', onLeave);
+    document.addEventListener('touchmove', (ev) => {
+      if (ev.touches && ev.touches[0]) {
+        onMove(ev.touches[0]);
+      }
+    }, {passive:true});
+    document.addEventListener('touchend', onLeave);
+
+    function raf() {
+      // lerp
+      curX += (targetX - curX) * ease;
+      curY += (targetY - curY) * ease;
+
+      // compute transforms, different layers move with different scale
+      const t1x = curX * maxX * 0.6;
+      const t1y = curY * maxY * 0.6;
+
+      const t2x = curX * maxX * 0.95;
+      const t2y = curY * maxY * 0.9;
+
+      const t3x = curX * maxX * 1.3;
+      const t3y = curY * maxY * 1.2;
+
+      // apply
+      wave1.style.transform = `translate(${t1x}px, ${t1y}px)`;
+      wave2.style.transform = `translate(${t2x}px, ${t2y}px)`;
+      wave3.style.transform = `translate(${t3x}px, ${t3y}px)`;
+
+      requestAnimationFrame(raf);
+    }
+
+    // start loop
+    raf();
+  })();
+</script>
+
+
   <section class="hero">
-    <div class="bg-pattern"></div>
     <h1>QA Engineer</h1>
     <p>Фокус на мобильные приложения, API, сценарии входа и платежей. Работа с командами, рост качества и надёжности продукта.</p>
-    <div class="hero-actions">
-      <a href="#" class="btn" target="_blank">LinkedIn</a>
-      <a href="#" class="btn" target="_blank">Рекомендации</a>
+    <div class="buttons">
+      <a href="#" class="btn">LinkedIn</a>
+      <a href="#" class="btn">Рекомендации</a>
     </div>
   </section>
+
+  <script>
+    // Background wave reacts to mouse move
+    const path = document.querySelector(".background-wave path");
+    document.addEventListener("mousemove", e => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 20;
+      const y = (e.clientY / innerHeight - 0.5) * 20;
+      path.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  </script>
 </body>
 </html>
