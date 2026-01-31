@@ -403,16 +403,51 @@
       r10: "Баг-трекинг"
     }
   };
+const langSwitch = document.getElementById('langSwitch');
+const langLabels = langSwitch.querySelectorAll('.lang-text');
 
-  let currentLang = 'ru';
-  document.getElementById('langToggle').onclick = () => {
-    currentLang = currentLang === 'ru' ? 'en' : 'ru';
-    document.getElementById('langToggle').innerText = currentLang === 'ru' ? 'EN' : 'RU';
+let currentLang = 'ru';
 
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      el.innerText = translations[currentLang][el.dataset.i18n];
+function applyLanguage(lang) {
+  const elements = document.querySelectorAll('[data-i18n]');
+
+  elements.forEach(el => el.classList.add('fade-out'));
+
+  setTimeout(() => {
+    elements.forEach(el => {
+      el.textContent = translations[lang][el.dataset.i18n];
+      el.classList.remove('fade-out');
     });
-  };
+  }, 200);
+
+  // move thumb
+  langSwitch.classList.toggle('en', lang === 'en');
+
+  // update labels
+  langLabels.forEach(label => {
+    label.classList.toggle(
+      'active',
+      label.textContent.toLowerCase() === lang
+    );
+  });
+
+  // shine animation
+  langSwitch.classList.remove('shine');
+  void langSwitch.offsetWidth; // force reflow
+  langSwitch.classList.add('shine');
+
+  setTimeout(() => {
+    langSwitch.classList.remove('shine');
+  }, 2000);
+
+  currentLang = lang;
+}
+
+langSwitch.addEventListener('click', () => {
+  applyLanguage(currentLang === 'ru' ? 'en' : 'ru');
+});
+
+
 </script>
 
 </body>
