@@ -1,454 +1,105 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QA Engineer | Resume | Robert Borovkov</title>
-
-  <meta http-equiv="Content-Security-Policy"
-      content="
-        default-src 'self' https:;
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        font-src https://fonts.gstatic.com;
-        script-src 'self' 'unsafe-inline';
-      ">
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Резюме QA Engineer</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
+    :root {
+      --accent: #10B981;
+      --bg: #0F172A;
+      --text: #E5E7EB;
+      --muted: #94A3B8;
+    }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: #0F172A;
-      color: #E5E7EB;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 60px 24px;
-    }
-
-    h1, h2, h3 {
-      margin-bottom: 16px;
-    }
-
-    a {
-      color: #38BDF8;
-      text-decoration: none;
-    }
-
-    /* Language toggle */
-    .lang-toggle {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      cursor: pointer;
-      font-weight: 600;
-      opacity: 0.7;
-    }
-
-    .lang-toggle:hover {
-      opacity: 1;
-    }
-
-    /* Accordion */
-    .accordion {
-      background: #020617;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      cursor: pointer;
-    }
-
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-
-    .accordion.active .accordion-content {
-      max-height: 500px;
-      opacity: 1;
-      margin-top: 12px;
-    }
-
-    /* Stack */
-    .stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .tool {
-      background: #1E293B;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
+    .hero {
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      height: 100vh;
+      padding: 0 10vw;
+      overflow: hidden;
     }
 
-    .tool-details {
-      display: none;
-      position: absolute;
-      top: 120%;
-      left: 0;
-      background: #020617;
-      padding: 10px;
-      border-radius: 8px;
-      width: 220px;
-      font-size: 13px;
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin: 0 0 16px;
     }
 
-    .tool.active .tool-details {
-      display: block;
+    .hero p {
+      font-size: 20px;
+      color: var(--muted);
+      max-width: 500px;
     }
 
-    /* Ladybug */
-    .ladybug {
-      position: fixed;
-      width: 40px;
-      height: 40px;
-      background: red;
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
+    .hero-actions {
+      margin-top: 32px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 999px;
+      background-color: var(--accent);
+      color: #0F172A;
+      font-weight: 600;
       cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
     }
 
-    /* Lists */
-    ul {
-      padding-left: 18px;
+    .btn:hover {
+      box-shadow: 0 0 20px rgba(16,185,129,0.5);
+      transform: translateY(-2px);
     }
 
-    footer {
-      text-align: center;
-      opacity: 0.6;
-      padding-bottom: 40px;
+    .bg-pattern {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.03) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03) 0%, transparent 60%);
+      background-size: cover;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* =====================
-   LANGUAGE SWITCH (PRO)
-===================== */
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
 
-.lang-switch {
-  position: fixed;
-  top: 18px;
-  right: 18px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  user-select: none;
-}
-
-.lang-text {
-  color: #64748B;
-  transition: color 0.3s ease;
-}
-
-.lang-text.active {
-  color: #E5E7EB;
-}
-
-.switch-track {
-  position: relative;
-  width: 54px;
-  height: 28px;
-  border-radius: 999px;
-  background: linear-gradient(
-    180deg,
-    #1E293B,
-    #020617
-  );
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,0.08),
-    inset 0 -1px 2px rgba(0,0,0,0.6);
-  overflow: hidden;
-}
-
-.switch-thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(
-    180deg,
-    #E5E7EB,
-    #CBD5F5
-  );
-  box-shadow:
-    0 4px 10px rgba(0,0,0,0.4),
-    inset 0 1px 2px rgba(255,255,255,0.8);
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-/* EN position */
-.lang-switch.en .switch-thumb {
-  transform: translateX(26px);
-}
-
-/* Shine effect */
-.switch-shine {
-  position: absolute;
-  top: -40%;
-  left: -60%;
-  width: 40%;
-  height: 180%;
-  background: linear-gradient(
-    120deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.7) 50%,
-    rgba(255,255,255,0) 100%
-  );
-  opacity: 0;
-  transform: rotate(12deg);
-}
-
-.lang-switch.shine .switch-shine {
-  animation: shineMove 2s ease forwards;
-}
-
-@keyframes shineMove {
-  0% {
-    left: -60%;
-    opacity: 0;
-  }
-  15% {
-    opacity: 0.9;
-  }
-  60% {
-    left: 120%;
-    opacity: 0.3;
-  }
-  100% {
-    left: 120%;
-    opacity: 0;
-  }
-}
-
-/* Text fade */
-[data-i18n] {
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-
-[data-i18n].fade-out {
-  opacity: 0;
-  transform: translateY(2px);
-}
-
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+      .hero p {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
-
-<div class="lang-switch" id="langSwitch" aria-label="Language switch">
-  <span class="lang-text">RU</span>
-
-  <div class="switch-track">
-    <div class="switch-thumb">
-      <div class="switch-shine"></div>
+  <section class="hero">
+    <div class="bg-pattern"></div>
+    <h1>QA Engineer</h1>
+    <p>Фокус на мобильные приложения, API, сценарии входа и платежей. Работа с командами, рост качества и надёжности продукта.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn" target="_blank">LinkedIn</a>
+      <a href="#" class="btn" target="_blank">Рекомендации</a>
     </div>
-  </div>
-
-  <span class="lang-text active">EN</span>
-</div>
-
-<div class="container">
-
-  <h1 data-i18n="title">QA Engineer</h1>
-
-  <!-- Companies -->
-  <h2 data-i18n="companies">Companies</h2>
-
-  <div class="accordion">
-    <strong><a href="#" target="_blank">Company A</a></strong>
-    <div class="accordion-content">
-      <p data-i18n="company_info">Fintech product, payments and core services.</p>
-    </div>
-  </div>
-
-  <!-- Stack -->
-  <h2 data-i18n="stack">Tech Stack</h2>
-
-  <div class="stack">
-    <div class="tool">Postman
-      <div class="tool-details">API testing, collections, environments</div>
-    </div>
-    <div class="tool">Newman
-      <div class="tool-details">CLI execution, CI integration</div>
-    </div>
-    <div class="tool">Allure
-      <div class="tool-details">Test results visualization</div>
-    </div>
-    <div class="tool">Zephyr
-      <div class="tool-details">Test management</div>
-    </div>
-    <div class="tool">mitmproxy
-      <div class="tool-details">Traffic interception</div>
-    </div>
-    <div class="tool">MongoDB
-      <div class="tool-details">Data validation</div>
-    </div>
-    <div class="tool">Kafka
-      <div class="tool-details">Event flow verification</div>
-    </div>
-    <div class="tool">Jira / Miro / Figma / TeamCity
-      <div class="tool-details">Process & collaboration tools</div>
-    </div>
-  </div>
-
-  <!-- Responsibilities -->
-  <h2 data-i18n="responsibilities">Responsibilities</h2>
-  <ul>
-    <li data-i18n="r1">Organization of testing process and resource allocation</li>
-    <li data-i18n="r2">Application of test design techniques</li>
-    <li data-i18n="r3">API contract testing</li>
-    <li data-i18n="r4">Functional / Non-functional / Exploratory / Integration / Localization testing</li>
-    <li data-i18n="r5">Test plans, test cases, checklists</li>
-    <li data-i18n="r6">Metrics collection and reporting</li>
-    <li data-i18n="r7">Quality ownership for Payments domain</li>
-    <li data-i18n="r8">Participation in planning and risk analysis</li>
-    <li data-i18n="r9">Smoke and regression testing</li>
-    <li data-i18n="r10">Bug tracking</li>
-  </ul>
-
-  <!-- Links -->
-  <h2 data-i18n="links">Links</h2>
-  <p><a href="#">LinkedIn</a> | <a href="#">Recommendations</a></p>
-
-  <!-- Contacts -->
-  <h2 data-i18n="contacts">Contacts</h2>
-  <p>
-    LinkedIn · Phone · Telegram · Email
-  </p>
-
-</div>
-
-<div class="ladybug" id="ladybug"></div>
-
-<footer>© 2026</footer>
-
-<script>
-  // Accordion
-  document.querySelectorAll('.accordion').forEach(acc => {
-    acc.addEventListener('click', () => acc.classList.toggle('active'));
-  });
-
-  // Tools
-  document.querySelectorAll('.tool').forEach(tool => {
-    tool.addEventListener('click', e => {
-      e.stopPropagation();
-      tool.classList.toggle('active');
-    });
-  });
-
-  // Ladybug logic
-  const bug = document.getElementById('ladybug');
-  bug.addEventListener('mouseover', () => {
-    const x = Math.random() * (window.innerWidth - 50);
-    const y = Math.random() * (window.innerHeight - 50);
-    bug.style.left = x + 'px';
-    bug.style.top = y + 'px';
-  });
-
-  // Language toggle
-  const translations = {
-    en: {
-      title: "QA Engineer",
-      companies: "Companies",
-      company_info: "Fintech product, payments and core services.",
-      stack: "Tech Stack",
-      responsibilities: "Responsibilities",
-      links: "Links",
-      contacts: "Contacts",
-      r1: "Organization of testing process and resource allocation",
-      r2: "Application of test design techniques",
-      r3: "API contract testing",
-      r4: "Functional / Non-functional / Exploratory / Integration / Localization testing",
-      r5: "Test plans, test cases, checklists",
-      r6: "Metrics collection and reporting",
-      r7: "Quality ownership for Payments domain",
-      r8: "Participation in planning and risk analysis",
-      r9: "Smoke and regression testing",
-      r10: "Bug tracking"
-    },
-    ru: {
-      title: "QA Инженер",
-      companies: "Компании",
-      company_info: "Финтех продукт, платежи и основные сервисы.",
-      stack: "Технологический стек",
-      responsibilities: "Обязанности",
-      links: "Ссылки",
-      contacts: "Контакты",
-      r1: "Организация процесса тестирования и распределение ресурсов",
-      r2: "Применение техник тест-дизайна",
-      r3: "Контрактное тестирование API",
-      r4: "Функциональное / нефункциональное / исследовательское / интеграционное / локализационное тестирование",
-      r5: "Тест-планы, тест-кейсы, чек-листы",
-      r6: "Сбор метрик и отчетность",
-      r7: "Ответственность за качество направления Payments",
-      r8: "Участие в планировании и анализе рисков",
-      r9: "Smoke и регрессионное тестирование",
-      r10: "Баг-трекинг"
-    }
-  };
-const langSwitch = document.getElementById('langSwitch');
-const langLabels = langSwitch.querySelectorAll('.lang-text');
-
-let currentLang = 'ru';
-
-function applyLanguage(lang) {
-  const elements = document.querySelectorAll('[data-i18n]');
-
-  elements.forEach(el => el.classList.add('fade-out'));
-
-  setTimeout(() => {
-    elements.forEach(el => {
-      el.textContent = translations[lang][el.dataset.i18n];
-      el.classList.remove('fade-out');
-    });
-  }, 200);
-
-  // move thumb
-  langSwitch.classList.toggle('en', lang === 'en');
-
-  // update labels
-  langLabels.forEach(label => {
-    label.classList.toggle(
-      'active',
-      label.textContent.toLowerCase() === lang
-    );
-  });
-
-  // shine animation
-  langSwitch.classList.remove('shine');
-  void langSwitch.offsetWidth; // force reflow
-  langSwitch.classList.add('shine');
-
-  setTimeout(() => {
-    langSwitch.classList.remove('shine');
-  }, 2000);
-
-  currentLang = lang;
-}
-
-langSwitch.addEventListener('click', () => {
-  applyLanguage(currentLang === 'ru' ? 'en' : 'ru');
-});
-
-
-</script>
-
+  </section>
 </body>
 </html>
