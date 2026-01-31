@@ -130,15 +130,138 @@
       opacity: 0.6;
       padding-bottom: 40px;
     }
+
+    /* =====================
+   LANGUAGE SWITCH (PRO)
+===================== */
+
+.lang-switch {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lang-text {
+  color: #64748B;
+  transition: color 0.3s ease;
+}
+
+.lang-text.active {
+  color: #E5E7EB;
+}
+
+.switch-track {
+  position: relative;
+  width: 54px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    #1E293B,
+    #020617
+  );
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.08),
+    inset 0 -1px 2px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(
+    180deg,
+    #E5E7EB,
+    #CBD5F5
+  );
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.4),
+    inset 0 1px 2px rgba(255,255,255,0.8);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* EN position */
+.lang-switch.en .switch-thumb {
+  transform: translateX(26px);
+}
+
+/* Shine effect */
+.switch-shine {
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 40%;
+  height: 180%;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  opacity: 0;
+  transform: rotate(12deg);
+}
+
+.lang-switch.shine .switch-shine {
+  animation: shineMove 2s ease forwards;
+}
+
+@keyframes shineMove {
+  0% {
+    left: -60%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  60% {
+    left: 120%;
+    opacity: 0.3;
+  }
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
+/* Text fade */
+[data-i18n] {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+[data-i18n].fade-out {
+  opacity: 0;
+  transform: translateY(2px);
+}
+
   </style>
 </head>
 <body>
 
-<div class="lang-toggle" id="langToggle" aria-label="Language switch">
-  <span class="lang-label" data-lang="ru">RU</span>
-  <span class="lang-separator">/</span>
-  <span class="lang-label active" data-lang="en">EN</span>
-  <span class="lang-glow"></span>
+<div class="lang-switch" id="langSwitch" aria-label="Language switch">
+  <span class="lang-text">RU</span>
+
+  <div class="switch-track">
+    <div class="switch-thumb">
+      <div class="switch-shine"></div>
+    </div>
+  </div>
+
+  <span class="lang-text active">EN</span>
 </div>
 
 <div class="container">
