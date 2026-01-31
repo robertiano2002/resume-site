@@ -30,7 +30,13 @@
       opacity: 1;
       will-change: transform;
       pointer-events: none;
-      transition: transform 0.1s ease-out;
+      animation: floatPattern 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatPattern {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(12px, -8px); }
+      100% { transform: translate(-12px, 8px); }
     }
 
     .hero {
