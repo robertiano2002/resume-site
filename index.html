@@ -84,7 +84,6 @@
   </section>
 
   <script>
-    // Web of particles
     const canvas = document.getElementById("bgCanvas");
     const ctx = canvas.getContext("2d");
     let width = window.innerWidth;
@@ -95,7 +94,7 @@
     const BASE_PARTICLES = Math.floor((width * height) / 8000);
     const MAX_DISTANCE = 160;
     const particles = [];
-    const mouse = { x: null, y: null };
+    const mouse = { x: null, y: null, radius: 100 };
 
     class Particle {
       constructor() {
@@ -114,6 +113,19 @@
 
         if (this.x <= 0 || this.x >= width) this.vx *= -1;
         if (this.y <= 0 || this.y >= height) this.vy *= -1;
+
+        // Repel effect
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouse.radius) {
+          const angle = Math.atan2(dy, dx);
+          const force = (mouse.radius - dist) / mouse.radius;
+          const repelX = Math.cos(angle) * force * 2;
+          const repelY = Math.sin(angle) * force * 2;
+          this.vx -= repelX * 0.05;
+          this.vy -= repelY * 0.05;
+        }
       }
       draw() {
         ctx.beginPath();
@@ -164,6 +176,16 @@
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouse.x = null;
+      mouse.y = null;
     });
   </script>
 </body>
