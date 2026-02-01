@@ -17,24 +17,33 @@
       overflow-x: hidden;
     }
 
-    canvas#bgCanvas {
+    .background-pattern {
       position: fixed;
       inset: 0;
       z-index: 0;
+      background-image:
+        linear-gradient(135deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(255,255,255,0.04) 25%, transparent 25%);
+      background-size: 42px 42px;
+      opacity: 1;
+      will-change: transform;
       pointer-events: none;
+      transition: transform 0.1s ease-out;
     }
 
     .hero {
       position: relative;
       padding: 80px 5vw;
-      background-color: transparent;
+      background-color: #0f172a;
       overflow: hidden;
       z-index: 1;
     }
 
     .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      font-size: 5rem;
+      margin-bottom: 3rem;
     }
 
     .hero p {
@@ -48,31 +57,50 @@
       margin-top: 2rem;
       display: flex;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .btn {
-      padding: 12px 24px;
-      border-radius: 12px;
+      font-size: 1.1rem;
+      padding: 16px 36px;
+      border-radius: 999px;
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      color: #E0F2F1;
+      color: #E5E7EB;
       font-weight: 600;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 15px rgba(20,184,166,0.4);
       text-decoration: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(20,184,166,0.35);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: skewX(-30deg);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 125%;
     }
 
     .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(20,184,166,0.6);
-      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(20,184,166,0.5);
     }
   </style>
 </head>
 <body>
-  <canvas id="bgCanvas"></canvas>
+  <div class="background-pattern" id="bgPattern"></div>
 
   <section class="hero">
     <h1>QA Engineer</h1>
@@ -84,108 +112,21 @@
   </section>
 
   <script>
-    const canvas = document.getElementById("bgCanvas");
-    const ctx = canvas.getContext("2d");
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    const pattern = document.getElementById('bgPattern');
+    let offset = 0;
 
-    const BASE_PARTICLES = Math.floor((width * height) / 8000);
-    const MAX_DISTANCE = 160;
-    const particles = [];
-    const mouse = { x: null, y: null, radius: 100 };
-
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.size = 1.2 + Math.random();
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x <= 0 || this.x >= width) this.vx *= -1;
-        if (this.y <= 0 || this.y >= height) this.vy *= -1;
-
-        // Repel effect
-        const dx = mouse.x - this.x;
-        const dy = mouse.y - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < mouse.radius) {
-          const angle = Math.atan2(dy, dx);
-          const force = (mouse.radius - dist) / mouse.radius;
-          const repelX = Math.cos(angle) * force * 2;
-          const repelY = Math.sin(angle) * force * 2;
-          this.vx -= repelX * 0.05;
-          this.vy -= repelY * 0.05;
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = "#14B8A6";
-        ctx.fill();
-      }
+    function animateBackground() {
+      offset += 0.25;
+      pattern.style.backgroundPosition = `${offset}px ${offset}px`;
+      requestAnimationFrame(animateBackground);
     }
 
-    function connectParticles() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+    animateBackground();
 
-          if (dist < MAX_DISTANCE) {
-            const opacity = 1 - dist / MAX_DISTANCE;
-            ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.3})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-      connectParticles();
-      requestAnimationFrame(animate);
-    }
-
-    for (let i = 0; i < BASE_PARTICLES; i++) {
-      particles.push(new Particle());
-    }
-
-    animate();
-
-    window.addEventListener("resize", () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
-
-    window.addEventListener("mouseleave", () => {
-      mouse.x = null;
-      mouse.y = null;
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 30;
+      const y = (e.clientY / window.innerHeight - 0.5) * 30;
+      pattern.style.transform = `translate(${x}px, ${y}px)`;
     });
   </script>
 </body>
