@@ -1,214 +1,170 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QA Engineer | Resume</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0F172A;
-      --text:#E5E7EB;
-      --muted:#CBD5E1;
-      --accent:#10B981; /* accent for lines */
-    }
-    html,body{height:100%;}
-    body{
-      margin:0;
-      font-family:Inter, system-ui, Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #0F172A;
+      color: #E5E7EB;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* full-screen canvas network */
-    #bgCanvas{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      display:block;
-      z-index:0;
-      pointer-events:none; /* allow clicks through */
-      background:linear-gradient(180deg, rgba(15,23,42,1) 0%, rgba(7,10,18,1) 100%);
+    canvas#bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
-    .hero{
-      position:relative;
-      z-index:1; /* over canvas */
-      padding:80px 6vw;
-      max-width:1100px;
-      margin:0 auto;
+    .hero {
+      position: relative;
+      padding: 80px 5vw;
+      background-color: transparent;
+      overflow: hidden;
+      z-index: 1;
     }
 
-    .hero h1{font-size:3rem;margin:0 0 .6rem}
-    .hero p{color:var(--muted);max-width:640px;line-height:1.6}
-    .buttons{margin-top:1.5rem;display:flex;gap:1rem}
-    .btn{display:inline-block;padding:.7rem 1.2rem;border-radius:999px;background:var(--accent);color:#071018;font-weight:600;text-decoration:none;box-shadow:0 6px 20px rgba(16,185,129,0.12);transition:transform .25s ease,box-shadow .25s ease}
-    .btn:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(16,185,129,0.18)}
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
 
-    /* responsive */
-    @media (max-width:700px){
-      .hero{padding:36px 5vw}
-      .hero h1{font-size:2rem}
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      line-height: 1.6;
+      color: #CBD5E1;
+    }
+
+    .buttons {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #E0F2F1;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 15px rgba(20,184,166,0.4);
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(20,184,166,0.6);
+      background: rgba(255, 255, 255, 0.12);
     }
   </style>
 </head>
 <body>
-  <!-- interactive network canvas (background) -->
-  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+  <canvas id="bgCanvas"></canvas>
 
-  <main class="hero">
+  <section class="hero">
     <h1>QA Engineer</h1>
     <p>Фокус на мобильные приложения, API, сценарии входа и платежей. Работа с командами, рост качества и надёжности продукта.</p>
     <div class="buttons">
-      <a class="btn" href="#" target="_blank">LinkedIn</a>
-      <a class="btn" href="#" target="_blank">Рекомендации</a>
+      <a href="#" class="btn">LinkedIn</a>
+      <a href="#" class="btn">Рекомендации</a>
     </div>
-  </main>
+  </section>
 
   <script>
-    // Interactive network background (canvas)
-    (function(){
-      const canvas = document.getElementById('bgCanvas');
-      const ctx = canvas.getContext('2d');
+    // Web of particles
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
 
-      let DPR = Math.max(window.devicePixelRatio || 1, 1);
-      let w = 0, h = 0;
+    const BASE_PARTICLES = Math.floor((width * height) / 8000);
+    const MAX_DISTANCE = 160;
+    const particles = [];
+    const mouse = { x: null, y: null };
 
-      // settings
-      const BASE_PARTICLES = 70; // base count, scaled by area
-      const MAX_DISTANCE = 160; // connect distance in px
-      const PARTICLE_SIZE = 1.6; // radius
-      const MOVE_SPEED = 0.3; // base speed multiplier
-
-      let particles = [];
-      const mouse = { x: null, y: null, radius: 120 };
-
-      function resize(){
-        DPR = Math.max(window.devicePixelRatio || 1, 1);
-        w = window.innerWidth;
-        h = window.innerHeight;
-        canvas.width = Math.round(w * DPR);
-        canvas.height = Math.round(h * DPR);
-        canvas.style.width = w + 'px';
-        canvas.style.height = h + 'px';
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-
-        // recalc particle count based on area, but keep reasonable limits
-        const area = (w*h)/ (1365*768); // relative to common desktop
-        const count = Math.min(200, Math.max(20, Math.round(BASE_PARTICLES * area)));
-        initParticles(count);
+    class Particle {
+      constructor() {
+        this.reset();
       }
-
-      function rand(min, max){ return Math.random() * (max - min) + min; }
-
-      function initParticles(count){
-        particles = [];
-        for(let i=0;i<count;i++){
-          particles.push({
-            x: rand(0,w),
-            y: rand(0,h),
-            vx: rand(-MOVE_SPEED, MOVE_SPEED),
-            vy: rand(-MOVE_SPEED, MOVE_SPEED),
-            r: PARTICLE_SIZE * (0.8 + Math.random()*0.8),
-            phase: Math.random() * Math.PI * 2
-          });
-        }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.size = 1.2 + Math.random();
       }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
 
-      // gentle auto motion (noise-like) via sin wave, small amplitude
-      function autoMove(p, t){
-        const amp = 0.35; // auto motion amplitude
-        p.x += Math.sin((t + p.phase)*0.0008) * amp;
-        p.y += Math.cos((t + p.phase)*0.0009) * amp;
+        if (this.x <= 0 || this.x >= width) this.vx *= -1;
+        if (this.y <= 0 || this.y >= height) this.vy *= -1;
       }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = "#14B8A6";
+        ctx.fill();
+      }
+    }
 
-      function step(t){
-        ctx.clearRect(0,0,w,h);
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
 
-        // draw connections after points, but we'll collect lines first
-        // draw points
-        ctx.fillStyle = '#9EEFD8'; // subtle dot color (light accent)
-        for(let i=0;i<particles.length;i++){
-          const p = particles[i];
-
-          // move
-          p.x += p.vx + (Math.sin(p.phase + t*0.0005)*0.02);
-          p.y += p.vy + (Math.cos(p.phase + t*0.0004)*0.02);
-
-          autoMove(p, t);
-
-          // bounds
-          if(p.x < -10) p.x = w + 10;
-          if(p.x > w + 10) p.x = -10;
-          if(p.y < -10) p.y = h + 10;
-          if(p.y > h + 10) p.y = -10;
-
-          // mouse interaction: repel
-          if(mouse.x !== null){
-            const dx = p.x - mouse.x;
-            const dy = p.y - mouse.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if(dist < mouse.radius){
-              const force = (mouse.radius - dist) / mouse.radius;
-              p.x += (dx / dist) * force * 6; // repulsion strength
-              p.y += (dy / dist) * force * 6;
-            }
-          }
-
-          // draw dot
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-          ctx.fill();
-        }
-
-        // draw lines between close particles
-        for(let i=0;i<particles.length;i++){
-          for(let j=i+1;j<particles.length;j++){
-            const a = particles[i];
-            const b = particles[j];
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const dist2 = dx*dx + dy*dy;
-            if(dist2 < MAX_DISTANCE*MAX_DISTANCE){
-              const dist = Math.sqrt(dist2);
-              const alpha = 1 - dist / MAX_DISTANCE; // 1..0
-              // line width and alpha scaled
-              ctx.strokeStyle = `rgba(20,184,166,${(alpha*0.12).toFixed(3)})`;
-              ctx.lineWidth = 1 * (alpha*0.9 + 0.1);
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.stroke();
-            }
+          if (dist < MAX_DISTANCE) {
+            const opacity = 1 - dist / MAX_DISTANCE;
+            ctx.strokeStyle = `rgba(20, 184, 166, ${opacity * 0.3})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
           }
         }
-
-        requestAnimationFrame(step);
       }
+    }
 
-      // mouse handlers
-      function onMove(e){
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      }
-      function onLeave(){ mouse.x = null; mouse.y = null; }
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      connectParticles();
+      requestAnimationFrame(animate);
+    }
 
-      window.addEventListener('mousemove', onMove, {passive:true});
-      window.addEventListener('mouseleave', onLeave);
-      window.addEventListener('touchmove', function(e){ if(e.touches && e.touches[0]){ mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; } }, {passive:true});
-      window.addEventListener('touchend', onLeave);
+    for (let i = 0; i < BASE_PARTICLES; i++) {
+      particles.push(new Particle());
+    }
 
-      window.addEventListener('resize', resize);
+    animate();
 
-      // init
-      resize();
-      requestAnimationFrame(step);
-
-    })();
+    window.addEventListener("resize", () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
   </script>
 </body>
 </html>
