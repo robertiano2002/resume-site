@@ -113,15 +113,6 @@
 
   <script>
     const pattern = document.getElementById('bgPattern');
-    let offset = 0;
-
-    function animateBackground() {
-      offset += 0.25;
-      pattern.style.backgroundPosition = `${offset}px ${offset}px`;
-      requestAnimationFrame(animateBackground);
-    }
-
-    animateBackground();
 
     document.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 30;
