@@ -1,153 +1,176 @@
-<html lang="ru"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QA Engineer | Resume</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#0F172A;
       --text:#E5E7EB;
       --muted:#CBD5E1;
-      --accent: #14B8A6;
+      --accent:#14B8A6;
     }
-    html,body { height: 100%; margin:0; }
+    html,body{height:100%;margin:0;}
     body{
-      font-family: 'Manrope', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
+      font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
     }
 
     /* canvas background (network) */
-    canvas#bgCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
+    canvas#bgCanvas{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:0;
       display:block;
-      pointer-events: none; /* allow clicks through */
+      pointer-events:none; /* allow clicks through */
       background: linear-gradient(180deg, rgba(7,10,18,1) 0%, rgba(15,23,42,1) 100%);
     }
 
-    /* content */
-    .page {
-      position: relative;
-      z-index: 1; /* above canvas */
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 80px 6vw;
+    /* page content over canvas */
+    header{display:flex;justify-content:flex-end;padding:20px 6vw 0;position:relative;z-index:1;}
+    .lang-toggle{
+      background:#1E293B;
+      color:var(--text);
+      padding:10px 20px;
+      border:1px solid rgba(203,213,225,0.06);
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      transition:background .22s, color .22s;
     }
+    .lang-toggle:hover{ background:rgba(20,184,166,0.14); color:#fff; }
 
-    h1 {
-      font-size: clamp(36px, 6vw, 64px);
-      margin: 0 0 20px 0;
-      line-height: 1.02;
-    }
-    p.lead {
-      color: var(--muted);
-      max-width: 680px;
-      margin: 0 0 28px 0;
-      font-size: 1.05rem;
-      line-height: 1.6;
-    }
+    .page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 6vw;}
 
-    /* Glass Glow buttons (bigger & rounder) */
-    .buttons { display:flex; gap:16px; flex-wrap:wrap; }
-    .btn {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width: 180px;
-      padding: 16px 40px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--text);
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 8px 30px rgba(20,184,166,0.12);
-      position: relative;
-      overflow: hidden;
-      transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease, background .28s ease;
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
+    h1{ font-size:clamp(36px,6vw,64px); margin:0 0 20px 0; line-height:1.02; }
+    p.lead{ color:var(--muted); max-width:680px; margin:0 0 28px 0; font-size:1.05rem; line-height:1.6; }
+
+    /* Glass Glow buttons */
+    .buttons{ display:flex; gap:16px; flex-wrap:wrap; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width:180px; padding:16px 40px; border-radius:999px;
+      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+      color:var(--text); font-weight:700; text-decoration:none;
+      box-shadow:0 8px 30px rgba(20,184,166,0.12);
+      position:relative; overflow:hidden;
+      transition:transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s, background .28s;
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     }
     .btn::before{
-      content:"";
-      position:absolute;
-      left:-80%;
-      top:0;
-      width:55%;
-      height:100%;
-      transform: skewX(-25deg);
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
-      transition: left .65s cubic-bezier(.2,.9,.2,1);
-      pointer-events: none;
+      content:""; position:absolute; left:-80%; top:0; width:55%; height:100%;
+      transform:skewX(-25deg);
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
+      transition:left .65s cubic-bezier(.2,.9,.2,1); pointer-events:none;
     }
     .btn:hover::before{ left:140%; }
-    .btn:hover{
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 18px 60px rgba(20,184,166,0.22);
-      background: rgba(255,255,255,0.1);
-    }
+    .btn:hover{ transform:translateY(-6px) scale(1.02); box-shadow:0 18px 60px rgba(20,184,166,0.22); background:rgba(255,255,255,0.1); }
+    .btn::after{ content:""; position:absolute; inset:-6px; border-radius:999px; box-shadow:0 10px 30px rgba(20,184,166,0.06); opacity:0; transition:opacity .28s; pointer-events:none; }
+    .btn:hover::after{ opacity:1; }
 
-    /* small subtle glow rim */
-    .btn::after {
-      content: "";
-      position: absolute;
-      inset: -6px;
-      border-radius: 999px;
-      box-shadow: 0 10px 30px rgba(20,184,166,0.06);
-      opacity: 0;
-      transition: opacity .28s ease;
-      pointer-events: none;
-    }
-    .btn:hover::after { opacity: 1; }
+    section{ margin:80px 0; position:relative; z-index:1; }
+    h2{ font-size:1.25rem; margin:0 0 12px 0; color:#E6EEF0; }
+    ul{ margin:0 0 0 18px; color:var(--muted); }
+
+    .tool-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-top:12px; }
+    .tool-grid .btn{ min-width:0; padding:12px 18px; border-radius:12px; background:rgba(255,255,255,0.03); box-shadow:none; border:1px solid rgba(255,255,255,0.04); font-weight:600; }
+    .tool-grid .btn:hover{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(20,184,166,0.12); }
+
+    footer{ text-align:center; padding:40px 0 80px; color:var(--muted); font-size:0.95rem; z-index:1; position:relative; }
 
     @media (max-width:640px){
-      .page { padding: 36px 5vw; }
-      .btn { min-width: 150px; padding: 12px 28px; font-size: 0.95rem; }
+      .page{ padding:36px 5vw; }
+      .btn{ min-width:150px; padding:12px 28px; font-size:0.95rem; }
+      .tool-grid{ grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
     }
   </style>
 </head>
 <body>
 
   <!-- canvas background (network) -->
-  <canvas id="bgCanvas" aria-hidden="true" width="1920" height="953" style="width: 1920px; height: 953px;"></canvas>
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+  <!-- header -->
+  <header>
+    <button class="lang-toggle" id="langToggle">RU / EN</button>
+  </header>
 
   <!-- content -->
   <main class="page" role="main">
-    <h1>QA Engineer</h1>
-    <p class="lead">"Driven by Details. Focused on Quality."</p>
+    <section class="hero">
+      <h1 id="title">QA Engineer</h1>
+      <p class="lead" id="subtitle">"Driven by Details. Focused on Quality."</p>
+      <div class="buttons">
+        <a class="btn" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a class="btn" href="#" target="_blank" rel="noreferrer">Recommendations</a>
+      </div>
+    </section>
 
-    <div class="buttons">
-      <a class="btn" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
-      <a class="btn" href="#" target="_blank" rel="noreferrer">Рекомендации</a>
-    </div>
+    <section class="about">
+      <h2>Обо мне</h2>
+      <p>Моя философия качества — внимание к деталям, системный подход и постоянная коллаборация с командой для создания надёжных продуктов.</p>
+    </section>
+
+    <section class="responsibilities">
+      <h2>Текущие обязанности</h2>
+      <ul>
+        <li>Организация процесса тестирования и распределение ресурсов</li>
+        <li>Применение техник тест-дизайна</li>
+        <li>Контрактное тестирование API</li>
+        <li>Функциональное / нефункциональное тестирование</li>
+        <li>Составление тест-планов, чек-листов и отчётов</li>
+      </ul>
+    </section>
+
+    <section class="stack">
+      <h2>Стек инструментов</h2>
+      <div class="tool-grid" id="toolGrid">
+        <button class="btn" data-desc="Работа с коллекциями, environments и сценариями">Postman</button>
+        <button class="btn" data-desc="Запуск коллекций в CI и локально">Newman</button>
+        <button class="btn" data-desc="Визуализация результатов тестов">Allure</button>
+        <button class="btn" data-desc="Тест-менеджмент">Zephyr</button>
+        <button class="btn" data-desc="Перехват сетевого трафика">mitmproxy</button>
+        <button class="btn" data-desc="База данных, валидация данных">MongoDB</button>
+        <button class="btn" data-desc="Проверка событий/транзакций">Kafka</button>
+        <button class="btn" data-desc="Issue tracking & agile">Jira</button>
+        <button class="btn" data-desc="Прототипы и макеты">Miro</button>
+        <button class="btn" data-desc="Дизайн и handoff">Figma</button>
+        <button class="btn" data-desc="CI/CD, сборки и деплой">TeamCity</button>
+      </div>
+    </section>
+
+    <footer>
+      © Роберт, QA Engineer
+    </footer>
   </main>
 
+  <!-- network canvas script: interactive web with repel-on-hover -->
   <script>
-  // ------- Interactive network (canvas) with repel-on-hover -------
   (function(){
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d', { alpha: true });
     let DPR = Math.max(window.devicePixelRatio || 1, 1);
     let W = 0, H = 0;
 
-    // configurable
-    const BASE_PARTICLES = 80;         // base particles (scaled by area)
-    const MAX_DISTANCE = 160;          // connect distance (px)
-    const PARTICLE_SIZE = 1.4;         // base size
-    const REPULSE_RADIUS = 120;        // how close mouse must be to repel
-    const REPULSE_FORCE = 0.12;        // repel strength multiplier
+    // config
+    const BASE_PARTICLES = 80;
+    const MAX_DISTANCE = 160;
+    const PARTICLE_SIZE = 1.4;
+    const REPULSE_RADIUS = 120;
+    const REPULSE_FORCE = 0.12;
 
     let particles = [];
-    const mouse = { x: null, y: null, active: false };
+    const mouse = { x:null, y:null, active:false };
 
-    function rand(min, max){ return Math.random()*(max-min)+min; }
+    function rand(min,max){ return Math.random()*(max-min)+min; }
 
     function resize(){
       DPR = Math.max(window.devicePixelRatio || 1, 1);
@@ -159,7 +182,6 @@
       canvas.style.height = H + 'px';
       ctx.setTransform(DPR,0,0,DPR,0,0);
 
-      // particle count scales with area but capped
       const areaScale = (W*H) / (1365*768);
       const count = Math.min(220, Math.max(20, Math.round(BASE_PARTICLES * areaScale)));
       initParticles(count);
@@ -169,17 +191,16 @@
       particles = [];
       for(let i=0;i<n;i++){
         particles.push({
-          x: rand(0, W),
-          y: rand(0, H),
-          vx: rand(-0.35, 0.35),
-          vy: rand(-0.35, 0.35),
+          x: rand(0,W),
+          y: rand(0,H),
+          vx: rand(-0.35,0.35),
+          vy: rand(-0.35,0.35),
           r: PARTICLE_SIZE * (0.7 + Math.random()*1.4),
           phase: Math.random()*Math.PI*2
         });
       }
     }
 
-    // soft auto movement for life
     function autoMove(p, t){
       p.x += Math.sin((t + p.phase)*0.0006)*0.14;
       p.y += Math.cos((t + p.phase)*0.0007)*0.12;
@@ -187,26 +208,22 @@
 
     function step(t){
       ctx.clearRect(0,0,W,H);
-
-      // draw particles
+      // particles
       for(let i=0;i<particles.length;i++){
         const p = particles[i];
-
-        // basic motion
         p.x += p.vx;
         p.y += p.vy;
         autoMove(p, t);
 
-        // bounce-ish edges
+        // wrap edges
         if(p.x < -10) p.x = W + 10;
         if(p.x > W + 10) p.x = -10;
         if(p.y < -10) p.y = H + 10;
         if(p.y > H + 10) p.y = -10;
 
-        // repel from mouse if close
+        // repel
         if(mouse.active && mouse.x !== null){
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
           const d2 = dx*dx + dy*dy;
           if(d2 < REPULSE_RADIUS*REPULSE_RADIUS){
             const dist = Math.sqrt(d2) || 0.0001;
@@ -231,8 +248,8 @@
           const d2 = dx*dx + dy*dy;
           if(d2 < MAX_DISTANCE*MAX_DISTANCE){
             const dist = Math.sqrt(d2);
-            let alpha = 1 - dist/MAX_DISTANCE; // 1..0
-            // Add a tiny boost when mouse nearby
+            let alpha = 1 - dist/MAX_DISTANCE;
+            // boost near mouse
             if(mouse.active && mouse.x !== null){
               const mx = (a.x - mouse.x), my = (a.y - mouse.y);
               const md2 = mx*mx + my*my;
@@ -254,37 +271,53 @@
     }
 
     // mouse handlers
-    function onMove(e){
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      mouse.active = true;
-    }
-    function onLeave(){
-      mouse.x = null;
-      mouse.y = null;
-      mouse.active = false;
-    }
+    function onMove(e){ mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; }
+    function onLeave(){ mouse.x = null; mouse.y = null; mouse.active = false; }
 
     window.addEventListener('mousemove', onMove, {passive:true});
-    window.addEventListener('touchmove', function(e){
-      if(e.touches && e.touches[0]){
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
-        mouse.active = true;
-      }
-    }, {passive:true});
+    window.addEventListener('touchmove', function(e){ if(e.touches && e.touches[0]){ mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.active = true; } }, {passive:true});
     window.addEventListener('touchend', onLeave);
     window.addEventListener('mouseleave', onLeave);
-
     window.addEventListener('resize', resize);
 
     // init
     resize();
     requestAnimationFrame(step);
 
+    // Optional: small UX for tool buttons - show description on click
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest('#toolGrid .btn');
+      if(!btn) return;
+      const desc = btn.dataset.desc || 'No description';
+      // simple inline popup (non-intrusive)
+      showToolPopup(btn, desc);
+    }, {passive:true});
+
+    function showToolPopup(el, text){
+      // remove old
+      const old = document.getElementById('toolPopup');
+      if(old) old.remove();
+      const rect = el.getBoundingClientRect();
+      const popup = document.createElement('div');
+      popup.id = 'toolPopup';
+      popup.textContent = text;
+      popup.style.position = 'fixed';
+      popup.style.left = (rect.left + rect.width/2) + 'px';
+      popup.style.top = (rect.bottom + 12) + 'px';
+      popup.style.transform = 'translateX(-50%)';
+      popup.style.background = 'rgba(7,10,18,0.95)';
+      popup.style.color = 'var(--muted)';
+      popup.style.padding = '10px 14px';
+      popup.style.borderRadius = '10px';
+      popup.style.boxShadow = '0 10px 30px rgba(2,6,23,0.6)';
+      popup.style.zIndex = 9999;
+      popup.style.fontSize = '13px';
+      document.body.appendChild(popup);
+      setTimeout(()=> popup.remove(), 3000);
+    }
+
   })();
   </script>
 
-
-
-</body></html>
+</body>
+</html>
