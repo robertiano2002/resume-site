@@ -396,6 +396,14 @@
         margin-bottom: 1em;
         color: var(--muted);
       }
+      a[href^="mailto:"] {
+        color: #d256dd; /* или любой другой цвет, например: white, red, #00ffcc */
+        text-decoration: underline; /* по желанию: underline, none, etc. */
+      }
+
+      a[href^="mailto:"]:hover {
+        color: #d532e4; /* цвет при наведении */
+      }
     </style>
   </head>
   <body>
