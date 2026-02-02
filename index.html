@@ -1,324 +1,1108 @@
-<!doctype html>
-<html lang="ru"> 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>QA Engineer | Resume</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0F172A;
-      --text:#E5E7EB;
-      --muted:#CBD5E1;
-      --accent:#14B8A6;
-    }
-    html,body{height:100%;margin:0;}
-    body{
-      font-family:'Manrope',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-      background:var(--bg);
-      color:var(--text);
-      overflow-x:hidden;
-    }
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>QA Engineer | Android/iOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Позиция плавающего тоггла внутри .page (изменяйте при необходимости) */
+        --lang-top: 160px;
+        --lang-right: 155px;
 
-    /* canvas background (network) */
-    canvas#bgCanvas{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      z-index:0;
-      display:block;
-      pointer-events:none; /* allow clicks through */
-      background: linear-gradient(180deg, rgba(7,10,18,1) 0%, rgba(15,23,42,1) 100%);
-    }
-
-    /* page content over canvas */
-    header{display:flex;justify-content:flex-end;padding:20px 6vw 0;position:relative;z-index:1;}
-    .lang-toggle{
-      background:#1E293B;
-      color:var(--text);
-      padding:10px 20px;
-      border:1px solid rgba(203,213,225,0.06);
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
-      transition:background .22s, color .22s;
-    }
-    .lang-toggle:hover{ background:rgba(20,184,166,0.14); color:#fff; }
-
-    .page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 6vw;}
-
-    h1{ font-size:clamp(36px,6vw,64px); margin:0 0 20px 0; line-height:1.02; }
-    p.lead{ color:var(--muted); max-width:680px; margin:0 0 28px 0; font-size:1.05rem; line-height:1.6; }
-
-    /* Glass Glow buttons */
-    .buttons{ display:flex; gap:16px; flex-wrap:wrap; }
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      min-width:180px; padding:16px 40px; border-radius:999px;
-      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
-      color:var(--text); font-weight:700; text-decoration:none;
-      box-shadow:0 8px 30px rgba(20,184,166,0.12);
-      position:relative; overflow:hidden;
-      transition:transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s, background .28s;
-      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    }
-    .btn::before{
-      content:""; position:absolute; left:-80%; top:0; width:55%; height:100%;
-      transform:skewX(-25deg);
-      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
-      transition:left .65s cubic-bezier(.2,.9,.2,1); pointer-events:none;
-    }
-    .btn:hover::before{ left:140%; }
-    .btn:hover{ transform:translateY(-6px) scale(1.02); box-shadow:0 18px 60px rgba(20,184,166,0.22); background:rgba(255,255,255,0.1); }
-    .btn::after{ content:""; position:absolute; inset:-6px; border-radius:999px; box-shadow:0 10px 30px rgba(20,184,166,0.06); opacity:0; transition:opacity .28s; pointer-events:none; }
-    .btn:hover::after{ opacity:1; }
-
-    section{ margin:80px 0; position:relative; z-index:1; }
-    h2{ font-size:1.25rem; margin:0 0 12px 0; color:#E6EEF0; }
-    ul{ margin:0 0 0 18px; color:var(--muted); }
-
-    .tool-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-top:12px; }
-    .tool-grid .btn{ min-width:0; padding:12px 18px; border-radius:12px; background:rgba(255,255,255,0.03); box-shadow:none; border:1px solid rgba(255,255,255,0.04); font-weight:600; }
-    .tool-grid .btn:hover{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(20,184,166,0.12); }
-
-    footer{ text-align:center; padding:40px 0 80px; color:var(--muted); font-size:0.95rem; z-index:1; position:relative; }
-
-    @media (max-width:640px){
-      .page{ padding:36px 5vw; }
-      .btn{ min-width:150px; padding:12px 28px; font-size:0.95rem; }
-      .tool-grid{ grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- canvas background (network) -->
-  <canvas id="bgCanvas" aria-hidden="true"></canvas>
-
-  <!-- header -->
-  <header>
-    <button class="lang-toggle" id="langToggle">RU / EN</button>
-  </header>
-
-  <!-- content -->
-  <main class="page" role="main">
-    <section class="hero">
-      <h1 id="title">QA Engineer</h1>
-      <p class="lead" id="subtitle">"Driven by Details. Focused on Quality."</p>
-      <div class="buttons">
-        <a class="btn" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a class="btn" href="#" target="_blank" rel="noreferrer">Recommendations</a>
-      </div>
-    </section>
-
-    <section class="about">
-      <h2>Обо мне</h2>
-      <p>Моя философия - системный подход к развитию. Уровень качества можно оценить не только по состоянию продукта, но и по подходу к его планированию и реализации</p>
-      <p>Задачей QA не может являеться лишь решение текущих проблем, но и проактивная деятельность и превентивное их устранение</p>
-    </section>
-
-    <section class="responsibilities">
-      <h2>Текущие обязанности</h2>
-      <ul>
-        <li>Организация процесса тестирования и распределение ресурсов</li>
-        <li>Контрактное тестирование API</li>
-        <li>Функциональное / нефункциональное тестирование</li>
-        <li>Применение техник тест-дизайна</li>
-        <li>Составление тест-планов, чек-листов и отчётов</li>
-      </ul>
-    </section>
-
-    <section class="stack">
-      <h2>Стек инструментов</h2>
-      <div class="tool-grid" id="toolGrid">
-        <button class="btn" data-desc="Работа с коллекциями, environments и сценариями">Postman</button>
-        <button class="btn" data-desc="Запуск коллекций в CI и локально">Newman</button>
-        <button class="btn" data-desc="Визуализация результатов тестов">Allure</button>
-        <button class="btn" data-desc="Тест-менеджмент">Zephyr</button>
-        <button class="btn" data-desc="Перехват сетевого трафика">mitmproxy</button>
-        <button class="btn" data-desc="База данных, валидация данных">MongoDB</button>
-        <button class="btn" data-desc="Проверка событий/транзакций">Kafka</button>
-        <button class="btn" data-desc="Issue tracking & agile">Jira</button>
-        <button class="btn" data-desc="Прототипы и макеты">Miro</button>
-        <button class="btn" data-desc="Дизайн и handoff">Figma</button>
-        <button class="btn" data-desc="CI/CD, сборки и деплой">TeamCity</button>
-      </div>
-    </section>
-
-    <footer>
-      © Роберт, QA Engineer
-    </footer>
-  </main>
-
-  <!-- network canvas script: interactive web with repel-on-hover -->
-  <script>
-  (function(){
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d', { alpha: true });
-    let DPR = Math.max(window.devicePixelRatio || 1, 1);
-    let W = 0, H = 0;
-
-    // config
-    const BASE_PARTICLES = 80;
-    const MAX_DISTANCE = 160;
-    const PARTICLE_SIZE = 1.4;
-    const REPULSE_RADIUS = 120;
-    const REPULSE_FORCE = 0.12;
-
-    let particles = [];
-    const mouse = { x:null, y:null, active:false };
-
-    function rand(min,max){ return Math.random()*(max-min)+min; }
-
-    function resize(){
-      DPR = Math.max(window.devicePixelRatio || 1, 1);
-      W = window.innerWidth;
-      H = window.innerHeight;
-      canvas.width = Math.round(W * DPR);
-      canvas.height = Math.round(H * DPR);
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
-      ctx.setTransform(DPR,0,0,DPR,0,0);
-
-      const areaScale = (W*H) / (1365*768);
-      const count = Math.min(220, Math.max(20, Math.round(BASE_PARTICLES * areaScale)));
-      initParticles(count);
-    }
-
-    function initParticles(n){
-      particles = [];
-      for(let i=0;i<n;i++){
-        particles.push({
-          x: rand(0,W),
-          y: rand(0,H),
-          vx: rand(-0.35,0.35),
-          vy: rand(-0.35,0.35),
-          r: PARTICLE_SIZE * (0.7 + Math.random()*1.4),
-          phase: Math.random()*Math.PI*2
-        });
+        --bg: #0f172a;
+        --text: #e5e7eb;
+        --muted: #cbd5e1;
+        --accent: #14b8a6;
       }
-    }
 
-    function autoMove(p, t){
-      p.x += Math.sin((t + p.phase)*0.0006)*0.14;
-      p.y += Math.cos((t + p.phase)*0.0007)*0.12;
-    }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family:
+          "Manrope",
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+      }
 
-    function step(t){
-      ctx.clearRect(0,0,W,H);
-      // particles
-      for(let i=0;i<particles.length;i++){
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        autoMove(p, t);
+      /* canvas background (network) */
+      canvas#bgCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        display: block;
+        pointer-events: none;
+        background: linear-gradient(
+          180deg,
+          rgb(119, 2, 137) 0%,
+          rgba(15, 23, 42, 1) 100%
+        );
+      }
 
-        // wrap edges
-        if(p.x < -10) p.x = W + 10;
-        if(p.x > W + 10) p.x = -10;
-        if(p.y < -10) p.y = H + 10;
-        if(p.y > H + 10) p.y = -10;
+      /* page content */
+      .page {
+        position: relative; /* важно: .lang-wrapper будет абсолютно позиционироваться относительно .page */
+        z-index: 1;
+        max-width: 1100px;
+        margin: 0;
+        padding: 80px;
+        transform: scale(1.2); /* 1.0 = 100%, 1.2 = 120% */
+        transform-origin: top left; /* откуда начинается масштабирование */
+      }
 
-        // repel
-        if(mouse.active && mouse.x !== null){
-          const dx = p.x - mouse.x, dy = p.y - mouse.y;
-          const d2 = dx*dx + dy*dy;
-          if(d2 < REPULSE_RADIUS*REPULSE_RADIUS){
-            const dist = Math.sqrt(d2) || 0.0001;
-            const force = (1 - dist/REPULSE_RADIUS) * REPULSE_FORCE;
-            p.vx += (dx/dist) * force;
-            p.vy += (dy/dist) * force;
+      h1 {
+        font-size: clamp(36px, 6vw, 64px);
+        margin: 0 0 18px 0;
+        line-height: 1.02;
+      }
+      p.lead {
+        color: var(--muted);
+        max-width: 680px;
+        margin: 0 0 22px 0;
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 180px;
+        padding: 16px 40px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--text);
+        font-weight: 700;
+        text-decoration: none;
+        box-shadow: 0 8px 30px rgba(20, 184, 166, 0.12);
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1),
+          box-shadow 0.28s,
+          background 0.28s;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+      }
+      .btn::before {
+        content: "";
+        position: absolute;
+        left: -80%;
+        top: 0;
+        width: 55%;
+        height: 100%;
+        transform: skewX(-25deg);
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.28),
+          transparent
+        );
+        transition: left 0.65s cubic-bezier(0.2, 0.9, 0.2, 1);
+        pointer-events: none;
+      }
+      .btn:hover::before {
+        left: 140%;
+      }
+      .btn:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 18px 60px rgba(20, 184, 166, 0.22);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .btn::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 999px;
+        box-shadow: 0 10px 30px rgba(20, 184, 166, 0.06);
+        opacity: 0;
+        transition: opacity 0.28s;
+        pointer-events: none;
+      }
+      .btn:hover::after {
+        opacity: 1;
+      }
+
+      section {
+        margin: 60px 0;
+        position: relative;
+        z-index: 1;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 0 0 12px 0;
+        color: #e6eef0;
+      }
+      ul {
+        margin: 0 0 0 18px;
+        color: var(--muted);
+      }
+
+      /* tool list */
+      .tool-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 0;
+        max-width: 600px;
+      }
+      .tool-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .tool-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.18s,
+          box-shadow 0.18s;
+      }
+      .tool-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(20, 184, 166, 0.12);
+        background: rgba(255, 255, 255, 0.045);
+      }
+      .dropdown {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform-origin: top;
+        transition:
+          max-height 0.34s ease,
+          opacity 0.24s ease,
+          padding 0.24s ease;
+        background: rgba(7, 10, 18, 0.95);
+        border-radius: 10px;
+        padding: 0 12px;
+        color: var(--muted);
+        border: 1px solid rgba(255, 255, 255, 0.02);
+      }
+      .tool-item.open .dropdown {
+        max-height: 160px;
+        opacity: 1;
+        padding: 10px 14px;
+      }
+
+      .contacts {
+        margin-top: 28px;
+        padding: 18px;
+        border-radius: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        position: fixed;
+        bottom: 1220px;
+        right: 160px;
+        z-index: 10;
+        max-width: 300px;
+      }
+      .contacts .btn {
+        min-width: 140px;
+        padding: 12px 28px;
+        border-radius: 12px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 40px 0 80px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        z-index: 1;
+        position: relative;
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          padding: 40px;
+        }
+        .btn {
+          min-width: 150px;
+          padding: 12px 28px;
+          font-size: 0.95rem;
+        }
+        .tool-list {
+          max-width: 100%;
+        }
+      }
+
+      .hero-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        max-width: 900px;
+      }
+
+      /* -------- Floating language widget (anchored inside .page) -------- */
+      .lang-wrapper {
+        position: absolute; /* ключ: привязка к .page */
+        top: var(--lang-top);
+        right: var(--lang-right);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 3;
+        -webkit-tap-highlight-color: transparent;
+        will-change: auto;
+        transform: none;
+      }
+
+      .lang-text {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .lang-switch {
+        position: relative;
+        width: 70px;
+        height: 36px;
+        flex-shrink: 0;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .lang-switch .slider {
+        position: absolute;
+        inset: 0;
+        background: #1e293b;
+        border-radius: 999px;
+        border: 1px solid rgba(203, 213, 225, 0.15);
+        cursor: pointer;
+        transition:
+          background 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      /* make input cover the whole switch, easier for accessibility */
+      .lang-switch input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+
+      .lang-switch .slider::before {
+        content: "";
+        position: absolute;
+        height: 28px;
+        width: 28px;
+        left: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(149, 13, 234, 0.292);
+        transition: transform 0.25s ease;
+      }
+
+      .lang-switch input:checked + .slider::before {
+        transform: translate(32px, -50%);
+      }
+
+      .lang-switch:hover .slider {
+        box-shadow:
+          0 0 12px rgba(119, 2, 137),
+          0 0 4px rgba(122, 21, 246, 0.6) inset;
+      }
+
+      /* dropdown arrows */
+      .dropdown-arrows {
+        display: inline-flex;
+        margin-left: 12px;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1;
+      }
+      .arrow-up,
+      .arrow-down {
+        transition:
+          opacity 0.12s ease,
+          transform 0.12s ease;
+        display: inline-block;
+      }
+      .arrow-up {
+        display: none;
+      }
+      .arrow-down {
+        display: inline-block;
+      }
+      .tool-item.open .arrow-down {
+        display: none;
+      }
+      .tool-item.open .arrow-up {
+        display: inline-block;
+      }
+
+      .tool-btn[aria-expanded="true"] {
+        box-shadow: 0 10px 30px rgba(20, 184, 166, 0.06);
+      }
+
+      /* focus-visible */
+      .lang-switch input:focus-visible + .slider {
+        box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.08);
+        outline: none;
+      }
+      .limited-line {
+        max-width: 65ch;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.6;
+        margin-bottom: 1em;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas
+      id="bgCanvas"
+      aria-hidden="true"
+      width="2133"
+      height="1058"
+      style="width: 2133px; height: 1058px"
+    ></canvas>
+
+    <main class="page" role="main" style="margin-left: 100px; margin-top: 5px">
+      <!-- Floating language toggle placed INSIDE .page so it scrolls/scales with it -->
+      <div
+        class="lang-wrapper"
+        id="langWrapper"
+        role="region"
+        aria-label="Language switch area"
+      >
+        <span class="lang-text" id="label-ru">RU</span>
+        <label class="lang-switch" aria-hidden="false">
+          <input
+            type="checkbox"
+            id="langToggle"
+            aria-labelledby="label-ru label-en"
+          />
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+        <span class="lang-text" id="label-en">EN</span>
+      </div>
+
+      <section class="hero" aria-labelledby="title">
+        <div class="hero-header">
+          <!-- title: ru/en -->
+          <h1 id="title" data-ru="QA Engineer" data-en="QA Engineer">
+            QA Engineer
+          </h1>
+
+          <!-- spacer: toggle moved to floating widget -->
+          <div style="width: 70px"></div>
+        </div>
+
+        <!-- subtitle -->
+        <p
+          class="lead"
+          id="subtitle"
+          data-ru="Driven by Details. Focused on Quality."
+          data-en="Driven by Details. Focused on Quality."
+        >
+          Driven by Details. Focused on Quality.
+        </p>
+      </section>
+
+      <section class="about">
+        <h2 data-ru="Обо мне" data-en="About me">Обо мне</h2>
+
+        <p
+          class="limited-line"
+          data-ru="Моя философия — системный подход к развитию. Уровень качества можно оценить не только по состоянию продукта, но и по подходу к его планированию и реализации."
+          data-en="My philosophy is a systematic approach to product quality. Quality is judged not only by product state but by planning and implementation."
+        >
+          Моя философия — системный подход к развитию. Уровень качества можно
+          оценить не только по состоянию продукта, но и по подходу к его
+          планированию и реализации.
+        </p>
+
+        <p
+          class="limited-line"
+          data-ru="Задачей QA не может являться лишь решение текущих проблем, но и проактивная деятельность и превентивное устранение."
+          data-en="QA's role is not only to fix current issues but to work proactively, preventing problems before they appear."
+        >
+          Задачей QA не может являться лишь решение текущих проблем, но и
+          проактивная деятельность и превентивное устранение.
+        </p>
+      </section>
+
+      <section class="experience">
+        <h2
+          data-ru="Опыт / Ключевые проекты"
+          data-en="Commercial Experience / Key Projects"
+        >
+          Опыт / Ключевые проекты
+        </h2>
+        <ul>
+          <li
+            data-ru="Payme (мобильные приложения, финтех / платежи)"
+            data-en="Payme (Mobile, FinTech / Payments)"
+          >
+            Payme (мобильные приложения, финтех / платежи)
+          </li>
+          <li
+            data-ru="World of Tanks (ПК, GameDev)"
+            data-en="World of Tanks (PC, GameDev)"
+          >
+            World of Tanks (ПК, GameDev)
+          </li>
+          <li
+            data-ru="World of Tanks Blitz (мобильные игры)"
+            data-en="World of Tanks Blitz (Mobile, GameDev)"
+          >
+            World of Tanks Blitz (мобильные игры)
+          </li>
+        </ul>
+      </section>
+
+      <section class="stack">
+        <h2 data-ru="Стек инструментов" data-en="Tools &amp; Technologies">
+          Стек инструментов
+        </h2>
+
+        <div class="tool-list" id="toolList">
+          <!-- API testing -->
+          <div class="tool-item">
+            <div class="tool-btn" tabindex="0" aria-expanded="false">
+              <span
+                class="tool-title"
+                data-ru="API тестирование"
+                data-en="API testing"
+                >API тестирование</span
+              >
+              <span class="dropdown-arrows"
+                ><span class="arrow-down">▼</span
+                ><span class="arrow-up">▲</span></span
+              >
+            </div>
+
+            <div class="dropdown">
+              <p
+                class="dropdown-title"
+                data-ru="Postman, Newman"
+                data-en="Postman, Newman"
+              >
+                Postman, Newman
+              </p>
+              <ul class="dropdown-list">
+                <li
+                  data-ru="Проектирование и поддержка коллекций и окружений."
+                  data-en="Designing and maintaining collections and environments."
+                >
+                  Проектирование и поддержка коллекций и окружений.
+                </li>
+                <li
+                  data-ru="Разработка API-автотестов на JavaScript, запуск тестов через Newman и анализ результатов."
+                  data-en="Writing API autotests in JavaScript, running via Newman and analyzing results."
+                >
+                  Разработка API-автотестов на JavaScript, запуск тестов через
+                  Newman и анализ результатов.
+                </li>
+                <li
+                  data-ru="Понимание интеграции автотестов в CI-пайплайны."
+                  data-en="Basic understanding of integrating autotests into CI pipelines."
+                >
+                  Понимание интеграции автотестов в CI-пайплайны.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Test Management -->
+          <div class="tool-item">
+            <div class="tool-btn" tabindex="0" aria-expanded="false">
+              <span
+                class="tool-title"
+                data-ru="Системы управления тестированием"
+                data-en="Test Management Systems"
+                >Системы управления тестированием</span
+              >
+              <span class="dropdown-arrows"
+                ><span class="arrow-down">▼</span
+                ><span class="arrow-up">▲</span></span
+              >
+            </div>
+
+            <div class="dropdown">
+              <p
+                class="dropdown-title"
+                data-ru="Allure, Zephyr, TestRail"
+                data-en="Allure, Zephyr, TestRail"
+              >
+                Allure, Zephyr, TestRail
+              </p>
+              <ul class="dropdown-list">
+                <li
+                  data-ru="Написание тест-кейсов, чек-листов и поддержание их в актуальном состоянии."
+                  data-en="Writing and maintaining test cases and checklists."
+                >
+                  Написание тест-кейсов, чек-листов и поддержание их в
+                  актуальном состоянии.
+                </li>
+                <li
+                  data-ru="Логирование результатов тестирования, сбор и анализ метрик."
+                  data-en="Logging test results, collecting and analysing metrics."
+                >
+                  Логирование результатов тестирования, сбор и анализ метрик.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Traffic analysis -->
+          <div class="tool-item">
+            <div class="tool-btn" tabindex="0" aria-expanded="false">
+              <span
+                class="tool-title"
+                data-ru="Анализ трафика"
+                data-en="Traffic analysis"
+                >Анализ трафика</span
+              >
+              <span class="dropdown-arrows"
+                ><span class="arrow-down">▼</span
+                ><span class="arrow-up">▲</span></span
+              >
+            </div>
+
+            <div class="dropdown">
+              <p
+                class="dropdown-title"
+                data-ru="mitmproxy (аналог Charles)"
+                data-en="mitmproxy (Charles analog)"
+              >
+                mitmproxy (аналог Charles)
+              </p>
+              <ul class="dropdown-list">
+                <li
+                  data-ru="Перехват и анализ сетевого трафика для контрактного тестирования."
+                  data-en="Intercept and analyse network traffic for contract testing."
+                >
+                  Перехват и анализ сетевого трафика для контрактного
+                  тестирования.
+                </li>
+                <li
+                  data-ru="Моделирование пользовательских сценариев и проверка UI."
+                  data-en="Model user scenarios and verify UI behaviour."
+                >
+                  Моделирование пользовательских сценариев и проверка UI.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Databases -->
+          <div class="tool-item">
+            <div class="tool-btn" tabindex="0" aria-expanded="false">
+              <span class="tool-title" data-ru="Базы данных" data-en="Databases"
+                >Базы данных</span
+              >
+              <span class="dropdown-arrows"
+                ><span class="arrow-down">▼</span
+                ><span class="arrow-up">▲</span></span
+              >
+            </div>
+
+            <div class="dropdown">
+              <p
+                class="dropdown-title"
+                data-ru="MongoDB, SQL"
+                data-en="MongoDB, SQL"
+              >
+                MongoDB, SQL
+              </p>
+              <p
+                data-ru="Проверка корректности сохранения данных после действий со стороны клиентского приложения и интегрированных сторонних сервисов (вендоров)."
+                data-en="Verification of data storage correctness after actions performed by the client application and integrated third-party services (vendors)"
+              >
+                Проверка корректности сохранения данных после действий со
+                стороны клиентского приложения и интегрированных сторонних
+                сервисов (вендоров).
+              </p>
+            </div>
+          </div>
+
+          <!-- Messaging / Kafka -->
+          <div class="tool-item">
+            <div class="tool-btn" tabindex="0" aria-expanded="false">
+              <span
+                class="tool-title"
+                data-ru="Брокеры сообщений"
+                data-en="Message brokers"
+                >Брокеры сообщений</span
+              >
+              <span class="dropdown-arrows"
+                ><span class="arrow-down">▼</span
+                ><span class="arrow-up">▲</span></span
+              >
+            </div>
+
+            <div class="dropdown">
+              <p class="dropdown-title" data-ru="Kafka" data-en="Kafka">
+                Kafka
+              </p>
+              <p
+                data-ru="Отправка и валидация событий, проверка публикации и прослушивания."
+                data-en="Send and validate events; check publishing and listening."
+              >
+                Отправка и валидация событий, проверка публикации и
+                прослушивания.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="responsibilities">
+        <h2
+          data-ru="Обязанности и достижения"
+          data-en="Responsibilities &amp; Achievements"
+        >
+          Обязанности и достижения
+        </h2>
+        <ul>
+          <li
+            data-ru="Организовал и поддерживал процесс тестирования, включая приоритизацию задач и распределение ресурсов"
+            data-en="Organized and maintained the testing process, including task prioritization and resource allocation"
+          >
+            Организовал и поддерживал процесс тестирования, включая
+            приоритизацию задач и распределение ресурсов
+          </li>
+          <li
+            data-ru="Применял техники тест-дизайна для оптимизации покрытия"
+            data-en="Applied test design techniques to optimize test coverage"
+          >
+            Применял техники тест-дизайна для оптимизации покрытия
+          </li>
+          <li
+            data-ru="Проводил контрактное тестирование API и валидацию бэкенда сервисов Идентификации и Платежей"
+            data-en="Performed API contract testing and backend validation Identification and Payment-related services"
+          >
+            Проводил контрактное тестирование API и валидацию бэкенда сервисов
+            Идентификации и Платежей
+          </li>
+          <li
+            data-ru="Проводил функциональное, нефункциональное, исследовательское, интеграционное и локализационное тестирование"
+            data-en="Conducted functional, non-functional, exploratory, integration and localization testing"
+          >
+            Проводил функциональное, нефункциональное, исследовательское,
+            интеграционное и локализационное тестирование
+          </li>
+          <li
+            data-ru="Создавал и поддерживал тест-планы, тест-кейсы и чек-листы в актуальном состоянии"
+            data-en="Created and maintained test plans, test cases and checklists"
+          >
+            Создавал и поддерживал тест-планы, тест-кейсы и чек-листы в
+            актуальном состоянии
+          </li>
+          <li
+            data-ru="Собирал метрики качества и готовил отчёты для стейкхолдеров"
+            data-en="Collected quality metrics and prepared test reports for stakeholders"
+          >
+            Собирал метрики качества и готовил отчёты для стейкхолдеров
+          </li>
+          <li
+            data-ru="Выступал владельцем качества для ключевого направления (Payments)"
+            data-en="Acted as Quality Owner for one of the key business domains (Payments)"
+          >
+            Выступал владельцем качества для ключевого направления (Payments)
+          </li>
+          <li
+            data-ru="Участвовал в планировании спринтов, refinement и анализе рисков"
+            data-en="Participated in sprint planning, backlog refinement and risk analysis within a large cross-functional team"
+          >
+            Участвовал в планировании спринтов, refinement и анализе рисков
+          </li>
+          <li
+            data-ru="Организовывал процесс смоук и регрессионного тестирования перед релизами. Занимался приоритизацией проверок"
+            data-en="Organized the process of smoke and regression testing prior to releases. Prioritized checks."
+          >
+            Организовывал процесс смоук и регрессионного тестирования перед
+            релизами. Занимался приоритизацией проверок
+          </li>
+          <li
+            data-ru="Управлял жизненным циклом багов: обнаружение, приоритизация, отслеживание, верификация, отчетность"
+            data-en="Managed bug lifecycle: detection, prioritization, tracking, verification, reporting"
+          >
+            Управлял жизненным циклом багов: обнаружение, приоритизация,
+            отслеживание, верификация, отчетность
+          </li>
+        </ul>
+      </section>
+
+      <section class="other">
+        <h2
+          data-ru="Доп. навыки и экспертиза"
+          data-en="Additional Skills &amp; Expertise"
+        >
+          Доп. навыки и экспертиза
+        </h2>
+        <ul>
+          <li
+            data-ru="Наставничество интернов и джуниоров, проведение внутренних лекций и онбординга в процессы компании"
+            data-en="Mentored interns and junior QA engineers, delivered internal lectures and onboarding sessions"
+          >
+            Наставничество интернов и джуниоров, проведение внутренних лекций и
+            онбординга в процессы компании
+          </li>
+          <li
+            data-ru="Применял risk-based testing и оценивал готовность релиза"
+            data-en="Applied risk-based testing and assessed release readiness"
+          >
+            Применял risk-based testing и оценивал готовность релиза
+          </li>
+          <li
+            data-ru="Понимание Agile / Scrum процессов"
+            data-en="Understanding of Agile / Scrum processes"
+          >
+            Понимание Agile / Scrum процессов
+          </li>
+          <li
+            data-ru="Инициировал и поддерживал улучшения процесса тестирования"
+            data-en="Initiated and supported testing process improvements"
+          >
+            Инициировал и поддерживал улучшения процесса тестирования
+          </li>
+          <li
+            data-ru="Эффективные навыки решения проблем"
+            data-en="Analytical mindset and effective problem-solving skills"
+          >
+            Эффективные навыки решения проблем
+          </li>
+        </ul>
+      </section>
+
+      <section class="contacts" aria-label="Контакты">
+        <h2 data-ru="Контакты" data-en="Contacts">Контакты</h2>
+
+        <div class="contact-list">
+          <div class="contact-item">
+            <span class="contact-label" data-ru="Телефон:" data-en="Phone:"
+              >Телефон:</span
+            >
+            <span class="contact-value">+998 33 003 18 03</span>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-label" data-ru="Email:" data-en="Email:"
+              >Email:</span
+            >
+            <a class="contact-link" href="mailto:example@mail.com"
+              >robertbrvkv@gmail.com</a
+            >
+          </div>
+        </div>
+
+        <div class="buttons">
+          <a
+            class="btn"
+            href="https://t.me/rob_2002"
+            target="_blank"
+            rel="noreferrer"
+            data-ru="Telegram"
+            data-en="Telegram"
+            >Telegram</a
+          >
+          <a
+            class="btn"
+            href="https://www.linkedin.com/in/robert-borovkov-8875b5345/"
+            target="_blank"
+            rel="noreferrer"
+            data-ru="LinkedIn"
+            data-en="LinkedIn"
+            >LinkedIn</a
+          >
+          <a
+            class="btn"
+            href="https://www.linkedin.com/in/robert-borovkov-8875b5345/details/recommendations/?detailScreenTabIndex=0"
+            target="_blank"
+            rel="noreferrer"
+            data-ru="Рекомендации"
+            data-en="Recommendations"
+            >Рекомендации</a
+          >
+        </div>
+      </section>
+
+      <footer data-ru="© Роберт, QA Engineer" data-en="© Robert, QA Engineer">
+        © Роберт, QA Engineer
+      </footer>
+    </main>
+
+    <script>
+      (function () {
+        // Canvas network (particles + links + repel) - original behaviour restored
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d", { alpha: true });
+        let DPR = Math.max(window.devicePixelRatio || 1, 1),
+          W = 0,
+          H = 0;
+        const BASE_PARTICLES = 80,
+          MAX_DISTANCE = 160,
+          PARTICLE_SIZE = 1.4,
+          REPULSE_RADIUS = 120,
+          REPULSE_FORCE = 0.12;
+        let particles = [];
+        const mouse = { x: null, y: null, active: false };
+
+        function rand(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        function resize() {
+          DPR = Math.max(window.devicePixelRatio || 1, 1);
+          W = innerWidth;
+          H = innerHeight;
+          canvas.width = Math.round(W * DPR);
+          canvas.height = Math.round(H * DPR);
+          canvas.style.width = W + "px";
+          canvas.style.height = H + "px";
+          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+          const areaScale = (W * H) / (1365 * 768);
+          const count = Math.min(
+            220,
+            Math.max(20, Math.round(BASE_PARTICLES * areaScale)),
+          );
+          initParticles(count);
+        }
+
+        function initParticles(n) {
+          particles = [];
+          for (let i = 0; i < n; i++) {
+            particles.push({
+              x: rand(0, W),
+              y: rand(0, H),
+              vx: rand(-0.35, 0.35),
+              vy: rand(-0.35, 0.35),
+              r: PARTICLE_SIZE * (0.7 + Math.random() * 1.4),
+              phase: Math.random() * Math.PI * 2,
+            });
           }
         }
 
-        // draw dot
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(20,184,166,0.95)';
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        ctx.fill();
-      }
+        function autoMove(p, t) {
+          p.x += Math.sin((t + p.phase) * 0.0006) * 0.14;
+          p.y += Math.cos((t + p.phase) * 0.0007) * 0.12;
+        }
 
-      // lines
-      for(let i=0;i<particles.length;i++){
-        for(let j=i+1;j<particles.length;j++){
-          const a = particles[i], b = particles[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
-          const d2 = dx*dx + dy*dy;
-          if(d2 < MAX_DISTANCE*MAX_DISTANCE){
-            const dist = Math.sqrt(d2);
-            let alpha = 1 - dist/MAX_DISTANCE;
-            // boost near mouse
-            if(mouse.active && mouse.x !== null){
-              const mx = (a.x - mouse.x), my = (a.y - mouse.y);
-              const md2 = mx*mx + my*my;
-              if(md2 < (REPULSE_RADIUS*1.2)*(REPULSE_RADIUS*1.2)){
-                alpha = Math.min(1, alpha + 0.15);
+        function step(t) {
+          ctx.clearRect(0, 0, W, H);
+
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            autoMove(p, t);
+
+            if (p.x < -10) p.x = W + 10;
+            if (p.x > W + 10) p.x = -10;
+            if (p.y < -10) p.y = H + 10;
+            if (p.y > H + 10) p.y = -10;
+
+            if (mouse.active && mouse.x !== null) {
+              const dx = p.x - mouse.x,
+                dy = p.y - mouse.y;
+              const d2 = dx * dx + dy * dy;
+              if (d2 < REPULSE_RADIUS * REPULSE_RADIUS) {
+                const dist = Math.sqrt(d2) || 0.0001;
+                const force = (1 - dist / REPULSE_RADIUS) * REPULSE_FORCE;
+                p.vx += (dx / dist) * force;
+                p.vy += (dy / dist) * force;
               }
             }
-            ctx.strokeStyle = `rgba(20,184,166,${(alpha*0.28).toFixed(3)})`;
-            ctx.lineWidth = 1;
+
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
+            ctx.fillStyle = "rgba(20,184,166,0.95)";
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
           }
+
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              const a = particles[i],
+                b = particles[j];
+              const dx = a.x - b.x,
+                dy = a.y - b.y,
+                d2 = dx * dx + dy * dy;
+              if (d2 < MAX_DISTANCE * MAX_DISTANCE) {
+                const dist = Math.sqrt(d2);
+                let alpha = 1 - dist / MAX_DISTANCE;
+                if (mouse.active && mouse.x !== null) {
+                  const mx = a.x - mouse.x,
+                    my = a.y - mouse.y;
+                  const md2 = mx * mx + my * my;
+                  if (md2 < REPULSE_RADIUS * 1.2 * (REPULSE_RADIUS * 1.2))
+                    alpha = Math.min(1, alpha + 0.15);
+                }
+                ctx.strokeStyle = `rgba(20,184,166,${(alpha * 0.28).toFixed(
+                  3,
+                )})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          requestAnimationFrame(step);
         }
+
+        function onMove(e) {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+          mouse.active = true;
+        }
+        function onLeave() {
+          mouse.x = null;
+          mouse.y = null;
+          mouse.active = false;
+        }
+
+        window.addEventListener("mousemove", onMove, { passive: true });
+        window.addEventListener(
+          "touchmove",
+          function (e) {
+            if (e.touches && e.touches[0]) {
+              mouse.x = e.touches[0].clientX;
+              mouse.y = e.touches[0].clientY;
+              mouse.active = true;
+            }
+          },
+          { passive: true },
+        );
+        window.addEventListener("touchend", onLeave);
+        window.addEventListener("mouseleave", onLeave);
+        window.addEventListener("resize", resize);
+
+        resize();
+        requestAnimationFrame(step);
+
+        // Tool dropdown logic
+        const toolList = document.getElementById("toolList");
+        toolList &&
+          toolList.addEventListener(
+            "click",
+            function (e) {
+              const btn = e.target.closest(".tool-btn");
+              if (!btn) return;
+              const item = btn.parentElement;
+              const wasOpen = item.classList.contains("open");
+              // close all
+              document.querySelectorAll(".tool-item.open").forEach((it) => {
+                it.classList.remove("open");
+                const tb = it.querySelector(".tool-btn");
+                if (tb) tb.setAttribute("aria-expanded", "false");
+              });
+              if (!wasOpen) {
+                item.classList.add("open");
+                const tb = item.querySelector(".tool-btn");
+                if (tb) tb.setAttribute("aria-expanded", "true");
+              }
+            },
+            { passive: true },
+          );
+
+        // close when click outside tool-list
+        document.addEventListener("click", function (e) {
+          if (e.target.closest(".tool-list")) return;
+          document.querySelectorAll(".tool-item.open").forEach((it) => {
+            it.classList.remove("open");
+            const tb = it.querySelector(".tool-btn");
+            if (tb) tb.setAttribute("aria-expanded", "false");
+          });
+        });
+      })();
+
+      // ===== Language toggle =====
+      (function () {
+        // run on DOMContentLoaded to be safe
+        document.addEventListener("DOMContentLoaded", () => {
+          const langToggle = document.getElementById("langToggle");
+          const translatableNodes =
+            document.querySelectorAll("[data-ru][data-en]");
+
+          function applyLanguage(isEn) {
+            document.documentElement.lang = isEn ? "en" : "ru";
+            translatableNodes.forEach((el) => {
+              el.textContent = isEn ? el.dataset.en : el.dataset.ru;
+            });
+          }
+
+          // initial (unchecked -> ru)
+          applyLanguage(!!langToggle.checked);
+
+          // toggle handler
+          langToggle.addEventListener("change", (e) => {
+            applyLanguage(e.target.checked);
+          });
+        });
+      })();
+      const limit = 40;
+      const p = document.getElementById("lineLimited");
+
+      if (p.textContent.length > limit) {
+        const words = p.textContent.split(" ");
+        let newText = "";
+        let line = "";
+
+        words.forEach((word) => {
+          if ((line + word).length > limit) {
+            newText += line.trim() + "\n";
+            line = "";
+          }
+          line += word + " ";
+        });
+
+        newText += line.trim();
+        p.textContent = newText;
       }
-
-      requestAnimationFrame(step);
-    }
-
-    // mouse handlers
-    function onMove(e){ mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; }
-    function onLeave(){ mouse.x = null; mouse.y = null; mouse.active = false; }
-
-    window.addEventListener('mousemove', onMove, {passive:true});
-    window.addEventListener('touchmove', function(e){ if(e.touches && e.touches[0]){ mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.active = true; } }, {passive:true});
-    window.addEventListener('touchend', onLeave);
-    window.addEventListener('mouseleave', onLeave);
-    window.addEventListener('resize', resize);
-
-    // init
-    resize();
-    requestAnimationFrame(step);
-
-    // Optional: small UX for tool buttons - show description on click
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('#toolGrid .btn');
-      if(!btn) return;
-      const desc = btn.dataset.desc || 'No description';
-      // simple inline popup (non-intrusive)
-      showToolPopup(btn, desc);
-    }, {passive:true});
-
-    function showToolPopup(el, text){
-      // remove old
-      const old = document.getElementById('toolPopup');
-      if(old) old.remove();
-      const rect = el.getBoundingClientRect();
-      const popup = document.createElement('div');
-      popup.id = 'toolPopup';
-      popup.textContent = text;
-      popup.style.position = 'fixed';
-      popup.style.left = (rect.left + rect.width/2) + 'px';
-      popup.style.top = (rect.bottom + 12) + 'px';
-      popup.style.transform = 'translateX(-50%)';
-      popup.style.background = 'rgba(7,10,18,0.95)';
-      popup.style.color = 'var(--muted)';
-      popup.style.padding = '10px 14px';
-      popup.style.borderRadius = '10px';
-      popup.style.boxShadow = '0 10px 30px rgba(2,6,23,0.6)';
-      popup.style.zIndex = 9999;
-      popup.style.fontSize = '13px';
-      document.body.appendChild(popup);
-      setTimeout(()=> popup.remove(), 3000);
-    }
-
-  })();
-  </script>
-
-</body>
+    </script>
+  </body>
 </html>
