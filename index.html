@@ -1,8 +1,15 @@
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>QA Engineer | Android/iOS</title>
+    <meta
+      name="description"
+      content="QA Engineer. Mobile, FinTech, GameDev. API testing, Kafka, CI, mitmproxy."
+    />
+    <meta name="theme-color" content="#0f172a" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
@@ -175,6 +182,8 @@
         flex-direction: column;
         gap: 8px;
       }
+
+      /* === Здесь: tool-btn теперь на button, но стиль прежний === */
       .tool-btn {
         display: flex;
         align-items: center;
@@ -226,6 +235,7 @@
           rgba(255, 255, 255, 0.01)
         );
         border: 1px solid rgba(255, 255, 255, 0.03);
+        /* Сохранил оригинальное поведение позиционирования, но сделал адаптивным ниже */
         position: fixed;
         bottom: 1220px;
         right: 160px;
@@ -257,6 +267,13 @@
           font-size: 0.95rem;
         }
         .tool-list {
+          max-width: 100%;
+        }
+        /* сделать contacts не фиксированными на мобильных, чтобы не улетали */
+        .contacts {
+          position: static;
+          bottom: auto;
+          right: auto;
           max-width: 100%;
         }
       }
@@ -402,7 +419,7 @@
       }
 
       a[href^="mailto:"]:hover {
-        color: #d532e4; /* цвет при наведении */
+        color: #e47cee; /* цвет при наведении */
       }
     </style>
   </head>
@@ -415,7 +432,7 @@
       style="width: 2133px; height: 1058px"
     ></canvas>
 
-    <main class="page" role="main" style="margin-left: 100px; margin-top: 5px">
+    <main class="page" role="main" aria-label="Основной контент">
       <!-- Floating language toggle placed INSIDE .page so it scrolls/scales with it -->
       <div
         class="lang-wrapper"
@@ -428,6 +445,8 @@
           <input
             type="checkbox"
             id="langToggle"
+            role="switch"
+            aria-checked="false"
             aria-labelledby="label-ru label-en"
           />
           <span class="slider" aria-hidden="true"></span>
@@ -443,7 +462,7 @@
           </h1>
 
           <!-- spacer: toggle moved to floating widget -->
-          <div style="width: 70px"></div>
+          <div style="width: 70px" aria-hidden="true"></div>
         </div>
 
         <!-- subtitle -->
@@ -517,7 +536,13 @@
         <div class="tool-list" id="toolList">
           <!-- API testing -->
           <div class="tool-item">
-            <div class="tool-btn" tabindex="0" aria-expanded="false">
+            <!-- заменил div на button — семантика улучшена, стиль тот же -->
+            <button
+              class="tool-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="dropdown-api"
+            >
               <span
                 class="tool-title"
                 data-ru="API тестирование"
@@ -528,9 +553,14 @@
                 ><span class="arrow-down">▼</span
                 ><span class="arrow-up">▲</span></span
               >
-            </div>
+            </button>
 
-            <div class="dropdown">
+            <div
+              class="dropdown"
+              id="dropdown-api"
+              role="region"
+              aria-hidden="true"
+            >
               <p
                 class="dropdown-title"
                 data-ru="Postman, Newman"
@@ -564,7 +594,12 @@
 
           <!-- Test Management -->
           <div class="tool-item">
-            <div class="tool-btn" tabindex="0" aria-expanded="false">
+            <button
+              class="tool-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="dropdown-tm"
+            >
               <span
                 class="tool-title"
                 data-ru="Системы управления тестированием"
@@ -575,9 +610,14 @@
                 ><span class="arrow-down">▼</span
                 ><span class="arrow-up">▲</span></span
               >
-            </div>
+            </button>
 
-            <div class="dropdown">
+            <div
+              class="dropdown"
+              id="dropdown-tm"
+              role="region"
+              aria-hidden="true"
+            >
               <p
                 class="dropdown-title"
                 data-ru="Allure, Zephyr, TestRail"
@@ -605,7 +645,12 @@
 
           <!-- Traffic analysis -->
           <div class="tool-item">
-            <div class="tool-btn" tabindex="0" aria-expanded="false">
+            <button
+              class="tool-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="dropdown-traffic"
+            >
               <span
                 class="tool-title"
                 data-ru="Анализ трафика"
@@ -616,9 +661,14 @@
                 ><span class="arrow-down">▼</span
                 ><span class="arrow-up">▲</span></span
               >
-            </div>
+            </button>
 
-            <div class="dropdown">
+            <div
+              class="dropdown"
+              id="dropdown-traffic"
+              role="region"
+              aria-hidden="true"
+            >
               <p
                 class="dropdown-title"
                 data-ru="mitmproxy (аналог Charles)"
@@ -646,7 +696,12 @@
 
           <!-- Databases -->
           <div class="tool-item">
-            <div class="tool-btn" tabindex="0" aria-expanded="false">
+            <button
+              class="tool-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="dropdown-db"
+            >
               <span class="tool-title" data-ru="Базы данных" data-en="Databases"
                 >Базы данных</span
               >
@@ -654,9 +709,14 @@
                 ><span class="arrow-down">▼</span
                 ><span class="arrow-up">▲</span></span
               >
-            </div>
+            </button>
 
-            <div class="dropdown">
+            <div
+              class="dropdown"
+              id="dropdown-db"
+              role="region"
+              aria-hidden="true"
+            >
               <p
                 class="dropdown-title"
                 data-ru="MongoDB, SQL"
@@ -677,7 +737,12 @@
 
           <!-- Messaging / Kafka -->
           <div class="tool-item">
-            <div class="tool-btn" tabindex="0" aria-expanded="false">
+            <button
+              class="tool-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="dropdown-mq"
+            >
               <span
                 class="tool-title"
                 data-ru="Брокеры сообщений"
@@ -688,9 +753,14 @@
                 ><span class="arrow-down">▼</span
                 ><span class="arrow-up">▲</span></span
               >
-            </div>
+            </button>
 
-            <div class="dropdown">
+            <div
+              class="dropdown"
+              id="dropdown-mq"
+              role="region"
+              aria-hidden="true"
+            >
               <p class="dropdown-title" data-ru="Kafka" data-en="Kafka">
                 Kafka
               </p>
@@ -840,7 +910,7 @@
             <span class="contact-label" data-ru="Email:" data-en="Email:"
               >Email:</span
             >
-            <a class="contact-link" href="mailto:example@mail.com"
+            <a class="contact-link" href="mailto:robertbrvkv@gmail.com"
               >robertbrvkv@gmail.com</a
             >
           </div>
@@ -851,7 +921,7 @@
             class="btn"
             href="https://t.me/rob_2002"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             data-ru="Telegram"
             data-en="Telegram"
             >Telegram</a
@@ -860,7 +930,7 @@
             class="btn"
             href="https://www.linkedin.com/in/robert-borovkov-8875b5345/"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             data-ru="LinkedIn"
             data-en="LinkedIn"
             >LinkedIn</a
@@ -869,7 +939,7 @@
             class="btn"
             href="https://www.linkedin.com/in/robert-borovkov-8875b5345/details/recommendations/?detailScreenTabIndex=0"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             data-ru="Рекомендации"
             data-en="Recommendations"
             >Рекомендации</a
@@ -884,7 +954,7 @@
 
     <script>
       (function () {
-        // Canvas network (particles + links + repel) - original behaviour restored
+        // ========== Canvas (оригинальная логика) + оптимизации ==========
         const canvas = document.getElementById("bgCanvas");
         const ctx = canvas.getContext("2d", { alpha: true });
         let DPR = Math.max(window.devicePixelRatio || 1, 1),
@@ -898,25 +968,33 @@
         let particles = [];
         const mouse = { x: null, y: null, active: false };
 
+        let rafId = null;
+        let lastFrame = 0;
+        let resizeTimeout = null;
+
         function rand(min, max) {
           return Math.random() * (max - min) + min;
         }
 
         function resize() {
-          DPR = Math.max(window.devicePixelRatio || 1, 1);
-          W = innerWidth;
-          H = innerHeight;
-          canvas.width = Math.round(W * DPR);
-          canvas.height = Math.round(H * DPR);
-          canvas.style.width = W + "px";
-          canvas.style.height = H + "px";
-          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-          const areaScale = (W * H) / (1365 * 768);
-          const count = Math.min(
-            220,
-            Math.max(20, Math.round(BASE_PARTICLES * areaScale)),
-          );
-          initParticles(count);
+          // debounce resize to avoid frequent reinit on mobile resize/rotate
+          if (resizeTimeout) clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(() => {
+            DPR = Math.max(window.devicePixelRatio || 1, 1);
+            W = innerWidth;
+            H = innerHeight;
+            canvas.width = Math.round(W * DPR);
+            canvas.height = Math.round(H * DPR);
+            canvas.style.width = W + "px";
+            canvas.style.height = H + "px";
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+            const areaScale = (W * H) / (1365 * 768);
+            const count = Math.min(
+              220,
+              Math.max(20, Math.round(BASE_PARTICLES * areaScale)),
+            );
+            initParticles(count);
+          }, 120);
         }
 
         function initParticles(n) {
@@ -939,6 +1017,7 @@
         }
 
         function step(t) {
+          // basic frame rate safeguard: limit to <= 60fps implicitly by requestAnimationFrame
           ctx.clearRect(0, 0, W, H);
 
           for (let i = 0; i < particles.length; i++) {
@@ -987,9 +1066,7 @@
                   if (md2 < REPULSE_RADIUS * 1.2 * (REPULSE_RADIUS * 1.2))
                     alpha = Math.min(1, alpha + 0.15);
                 }
-                ctx.strokeStyle = `rgba(20,184,166,${(alpha * 0.28).toFixed(
-                  3,
-                )})`;
+                ctx.strokeStyle = `rgba(20,184,166,${(alpha * 0.28).toFixed(3)})`;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(a.x, a.y);
@@ -999,7 +1076,7 @@
             }
           }
 
-          requestAnimationFrame(step);
+          rafId = requestAnimationFrame(step);
         }
 
         function onMove(e) {
@@ -1013,6 +1090,7 @@
           mouse.active = false;
         }
 
+        // event listeners with passive where appropriate
         window.addEventListener("mousemove", onMove, { passive: true });
         window.addEventListener(
           "touchmove",
@@ -1025,16 +1103,58 @@
           },
           { passive: true },
         );
-        window.addEventListener("touchend", onLeave);
-        window.addEventListener("mouseleave", onLeave);
-        window.addEventListener("resize", resize);
+        window.addEventListener("touchend", onLeave, { passive: true });
+        window.addEventListener("mouseleave", onLeave, { passive: true });
 
-        resize();
-        requestAnimationFrame(step);
+        // respect prefers-reduced-motion
+        const reducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
 
-        // Tool dropdown logic
+        if (!reducedMotion) {
+          window.addEventListener("resize", resize, { passive: true });
+          // start
+          resize();
+          rafId = requestAnimationFrame(step);
+        } else {
+          // if reduced motion — draw static soft gradient only
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // pause animation when page hidden to save CPU
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) {
+            if (rafId) {
+              cancelAnimationFrame(rafId);
+              rafId = null;
+            }
+          } else {
+            if (!reducedMotion && !rafId) {
+              rafId = requestAnimationFrame(step);
+            }
+          }
+        });
+
+        // ========== Tool dropdown logic (semantics + keyboard access) ==========
         const toolList = document.getElementById("toolList");
-        toolList &&
+
+        // helper: close all
+        function closeAllTools() {
+          document.querySelectorAll(".tool-item.open").forEach((it) => {
+            it.classList.remove("open");
+            const tb = it.querySelector(".tool-btn");
+            if (tb) {
+              tb.setAttribute("aria-expanded", "false");
+              const id = tb.getAttribute("aria-controls");
+              if (id) {
+                const panel = document.getElementById(id);
+                if (panel) panel.setAttribute("aria-hidden", "true");
+              }
+            }
+          });
+        }
+
+        if (toolList) {
           toolList.addEventListener(
             "click",
             function (e) {
@@ -1043,44 +1163,54 @@
               const item = btn.parentElement;
               const wasOpen = item.classList.contains("open");
               // close all
-              document.querySelectorAll(".tool-item.open").forEach((it) => {
-                it.classList.remove("open");
-                const tb = it.querySelector(".tool-btn");
-                if (tb) tb.setAttribute("aria-expanded", "false");
-              });
+              closeAllTools();
               if (!wasOpen) {
                 item.classList.add("open");
-                const tb = item.querySelector(".tool-btn");
-                if (tb) tb.setAttribute("aria-expanded", "true");
+                btn.setAttribute("aria-expanded", "true");
+                const id = btn.getAttribute("aria-controls");
+                if (id) {
+                  const panel = document.getElementById(id);
+                  if (panel) panel.setAttribute("aria-hidden", "false");
+                }
               }
             },
             { passive: true },
           );
 
+          // keyboard support: Enter/Space to toggle, Esc to close
+          toolList.addEventListener("keydown", function (e) {
+            const btn = e.target.closest(".tool-btn");
+            if (!btn) return;
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              btn.click();
+            } else if (e.key === "Escape") {
+              closeAllTools();
+              btn.focus();
+            }
+          });
+        }
+
         // close when click outside tool-list
         document.addEventListener("click", function (e) {
           if (e.target.closest(".tool-list")) return;
-          document.querySelectorAll(".tool-item.open").forEach((it) => {
-            it.classList.remove("open");
-            const tb = it.querySelector(".tool-btn");
-            if (tb) tb.setAttribute("aria-expanded", "false");
-          });
+          closeAllTools();
         });
-      })();
 
-      // ===== Language toggle =====
-      (function () {
-        // run on DOMContentLoaded to be safe
-        document.addEventListener("DOMContentLoaded", () => {
+        // ========== Language toggle (kept as checkbox for visuals, but improved semantics) ==========
+        (function () {
           const langToggle = document.getElementById("langToggle");
           const translatableNodes =
             document.querySelectorAll("[data-ru][data-en]");
+
+          if (!langToggle) return;
 
           function applyLanguage(isEn) {
             document.documentElement.lang = isEn ? "en" : "ru";
             translatableNodes.forEach((el) => {
               el.textContent = isEn ? el.dataset.en : el.dataset.ru;
             });
+            langToggle.setAttribute("aria-checked", isEn ? "true" : "false");
           }
 
           // initial (unchecked -> ru)
@@ -1090,27 +1220,13 @@
           langToggle.addEventListener("change", (e) => {
             applyLanguage(e.target.checked);
           });
-        });
+
+          // keyboard: ensure space/enter toggles (checkbox native handles it) but keep role= switch in markup
+        })();
+
+        // ========== misc: guard on non-existent element and removed buggy lineLimited code ==========
+        // (в исходнике был код, который использовал элемент с id="lineLimited" — его нет в текущем DOM)
       })();
-      const limit = 40;
-      const p = document.getElementById("lineLimited");
-
-      if (p.textContent.length > limit) {
-        const words = p.textContent.split(" ");
-        let newText = "";
-        let line = "";
-
-        words.forEach((word) => {
-          if ((line + word).length > limit) {
-            newText += line.trim() + "\n";
-            line = "";
-          }
-          line += word + " ";
-        });
-
-        newText += line.trim();
-        p.textContent = newText;
-      }
     </script>
   </body>
 </html>
