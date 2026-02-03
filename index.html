@@ -18,6 +18,7 @@
     />
     <style>
       :root {
+        /* Позиция плавающего тоггла внутри viewport (редактируйте по необходимости) */
         --lang-top: 200px;
         --lang-right: 865px;
         --lang-scale: 1;
@@ -47,6 +48,7 @@
         overflow-x: hidden;
       }
 
+      /* canvas background (network) */
       canvas#bgCanvas {
         position: fixed;
         inset: 0;
@@ -60,17 +62,6 @@
           rgb(119, 2, 137) 0%,
           rgba(15, 23, 42, 1) 100%
         );
-      }
-
-      .page {
-        position: relative;
-        z-index: 1;
-        max-width: 1100px;
-        margin: 0;
-        padding: 80px;
-        transform: scale(1.2);
-        transform-origin: top left;
-        padding-left: 300px;
       }
 
       h1 {
@@ -93,7 +84,6 @@
         flex-wrap: wrap;
         margin-top: 10px;
       }
-
       .btn {
         display: inline-flex;
         align-items: center;
@@ -113,9 +103,9 @@
           transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1),
           box-shadow 0.28s,
           background 0.28s;
+        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
       }
-
       .btn::before {
         content: "";
         position: absolute;
@@ -133,17 +123,14 @@
         transition: left 0.65s cubic-bezier(0.2, 0.9, 0.2, 1);
         pointer-events: none;
       }
-
       .btn:hover::before {
         left: 140%;
       }
-
       .btn:hover {
         transform: translateY(-6px) scale(1.02);
         box-shadow: 0 18px 60px rgba(20, 184, 166, 0.22);
         background: rgba(255, 255, 255, 0.1);
       }
-
       .btn::after {
         content: "";
         position: absolute;
@@ -154,7 +141,6 @@
         transition: opacity 0.28s;
         pointer-events: none;
       }
-
       .btn:hover::after {
         opacity: 1;
       }
@@ -164,18 +150,15 @@
         position: relative;
         z-index: 1;
       }
-
       h2 {
         font-size: 1.15rem;
         margin: 0 0 12px 0;
         color: #e6eef0;
       }
-
       ul {
         margin: 0 0 0 18px;
         color: var(--muted);
       }
-
       .limited-line {
         max-width: 65ch;
         line-height: 1.6;
@@ -187,12 +170,13 @@
         word-wrap: break-word;
       }
 
+      /* ========== tool list (исходные параметры) ========== */
       .tool-list {
         display: flex;
         flex-direction: column;
         gap: 12px;
         margin-top: 0;
-        max-width: 00px;
+        max-width: 600px;
       }
 
       .tool-item {
@@ -200,90 +184,105 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        width: 400px; /* сохранённая ширина кнопки */
       }
 
       .tool-btn {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 18px 16px;
-        border-radius: 10px;
-        width: 400px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 12px 16px;
+        border-radius: 12px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.04);
         color: var(--text);
         font-weight: 600;
         cursor: pointer;
         transition:
           transform 0.18s,
-          box-shadow 0.18s,
-          background 0.18s;
+          box-shadow 0.18s;
       }
-
       .tool-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 24px rgba(20, 184, 166, 0.12);
-        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(20, 184, 166, 0.12);
+        background: rgba(255, 255, 255, 0.045);
       }
 
+      /* dropdown — абсолютный, как у вас был */
       .dropdown {
-        margin-top: 6px;
-        width: 370px;
+        position: absolute;
+        top: calc(100% + 10px); /* под кнопку, как в оригинале */
+        left: 0;
+        width: 570px; /* сохранённая желаемая ширина */
         max-height: 0;
         opacity: 0;
         overflow: hidden;
-        z-index: 1;
+        z-index: 60; /* выше контента, ниже canvas */
         transition:
-          max-height 0.3s ease,
-          opacity 0.3s ease,
-          padding 0.3s ease;
-        background: rgba(255, 255, 255, 0.04);
+          max-height 0.34s ease,
+          opacity 0.24s ease,
+          padding 0.24s ease;
+        background: rgba(7, 10, 18, 0.95);
         border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 0 14px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(8px);
+        padding: 0 12px;
+        border: 1px solid rgba(255, 255, 255, 0.02);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        box-sizing: border-box;
         color: var(--muted);
+        backdrop-filter: blur(6px);
       }
 
       .tool-item.open .dropdown {
-        max-height: 400px;
+        max-height: 300px;
         opacity: 1;
         padding: 10px 14px;
       }
 
+      .dropdown-title {
+        margin: 6px 0;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .dropdown-list {
+        margin: 8px 0 0 18px;
+        padding-left: 0;
+        list-style: disc;
+      }
+
+      /* стрелки (вниз/вверх) */
       .dropdown-arrows .arrow-down {
         display: inline;
       }
-
       .dropdown-arrows .arrow-up {
         display: none;
       }
-
       .tool-item.open .dropdown-arrows .arrow-down {
         display: none;
       }
-
       .tool-item.open .dropdown-arrows .arrow-up {
         display: inline;
       }
 
+      /* ========== contacts (с сохранением позиционирования) ========== */
       .contacts {
-        /* убираем margin-top: -1190px; */
-        position: absolute; /* или fixed, если хотите, чтобы контакт всегда был виден независимо от родителя/скролла */
-        top: 200px; /* подберите значение под вашу верстку */
-        right: 300px; /* сохраняем ваш отступ справа */
-        margin-top: 0;
-        z-index: 900; /* выше основного контента, ниже canvas если нужно */
+        position: absolute; /* ВЕРНУЛ на место */
+        top: 80px; /* Поставь нужную высоту от верха */
+        right: 210px;
         padding: 18px;
         border-radius: 12px;
         background: linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0.22),
-          rgba(255, 255, 255, 0.08)
+          rgba(255, 255, 255, 0.12),
+          rgba(255, 255, 255, 0.05)
         );
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.26);
         max-width: 300px;
+
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(8px);
+        color: #f8fafc;
+        transition: all 0.28s ease;
       }
 
       .lang-wrapper {
@@ -295,7 +294,21 @@
       }
 
       .contact-list {
-        margin-bottom: 18px;
+        margin-bottom: 14px;
+      } /* чуть больше отступа между контактными строками */
+      .contact-item {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      } /* увеличил для читаемости */
+      .contact-label {
+        display: inline-block;
+        width: 72px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .contact-value {
+        color: #e6eef0;
+        display: inline-block;
       }
 
       .contacts .btn {
@@ -313,20 +326,23 @@
         position: relative;
       }
 
+      /* ======= Toggle styles (сохранение формы + ровный сдвиг ползунка) ======= */
       .lang-text {
         font-size: 1rem;
         font-weight: 700;
         color: var(--text);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        user-select: none;
+        pointer-events: none;
       }
 
       .lang-switch {
         position: relative;
-        width: 60px;
-        cursor: pointer;
+        width: 72px; /* если хотите точную исходную — 72px (как в одном из ваших вариантов) */
         height: 36px;
         display: inline-block;
         vertical-align: middle;
+        cursor: pointer;
       }
 
       .lang-switch .slider {
@@ -338,24 +354,32 @@
         border-radius: 999px;
         border: 1px solid rgba(255, 255, 255, 0.06);
         box-sizing: border-box;
+        cursor: pointer;
       }
 
+      /* Thumb: оставляем left padding 4px, ширина 28px — чтобы обе позиции были симметричны */
       .lang-switch .slider::before {
         content: "";
         position: absolute;
         width: 28px;
         height: 28px;
+        left: 4px;
         top: 4px;
-        left: 2px;
         background: #fff;
         border-radius: 50%;
         box-shadow: 0 4px 10px rgba(149, 13, 234, 0.292);
-        transition: transform 0.25s ease;
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.18s;
         transform: translateX(0);
+        box-sizing: border-box;
       }
 
+      /* Смещение в правый край: calc(100% - thumbWidth - left*2) */
       .lang-switch input:checked + .slider::before {
-        transform: translateX(28px);
+        transform: translateX(
+          calc(100% - 28px - 8px)
+        ); /* 8px = 2 * left(4px) */
       }
 
       .lang-switch input {
@@ -378,67 +402,105 @@
           0 0 4px rgba(122, 21, 246, 0.6) inset;
       }
 
-      .custom-link {
-        color: #1261f3;
-        text-decoration: none;
-      }
-
-      .custom-link:hover {
-        color: #2e70ff;
-        text-decoration: underline;
-      }
-
+      /* фокус и доступность */
       .lang-switch input:focus-visible + .slider {
         box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.08);
         outline: none;
       }
 
+      /* wrapper fixed (как у вас) — позиция сохраняется, это не смещает другие элементы */
       #langWrapper {
         position: fixed;
         z-index: 9999;
         pointer-events: auto;
         transition:
           top 0.12s ease,
-          left 0.12s ease;
+          left 0.12s ease,
+          box-shadow 0.3s ease,
+          opacity 0.3s ease;
         will-change: top, left;
+        cursor: pointer;
+      }
+      .lang-switch:hover .slider {
+        box-shadow:
+          0 0 12px rgba(119, 2, 137),
+          0 0 4px rgba(122, 21, 246, 0.6) inset;
       }
 
+      /* ========== responsive (только масштаб/доступность, без перестановки элементов) ========== */
+      @media (max-width: 900px) {
+        /* уменьшаем page padding, но не меняем layout */
+        .page {
+          padding: 56px;
+          transform: scale(1.05);
+        }
+        .tool-item {
+          width: 360px;
+        } /* чуть уже, сохраняем визуальную пропорцию */
+      }
       @media (max-width: 640px) {
         .page {
           padding: 40px;
+          transform: scale(1);
         }
-
         .btn {
           min-width: 150px;
           padding: 12px 28px;
           font-size: 0.95rem;
         }
-
         .tool-list {
           max-width: 100%;
         }
-
         .contacts {
           position: static;
           margin-top: 40px;
           max-width: 100%;
-          line-height: 2;
+          margin-left: 0;
+          margin-right: 0;
         }
-
         .lang-switch {
-          width: clamp(46px, 12vw, 70px);
-          height: clamp(34px, 6.5vw, 36px);
+          width: clamp(56px, 12vw, 72px);
+          height: clamp(32px, 6.5vw, 36px);
         }
-
         #langWrapper {
           position: static;
+          top: auto;
+          left: auto;
           transform: none;
         }
-
         .dropdown {
           position: static;
           width: 100%;
+          top: auto;
+          left: auto;
         }
+      }
+
+      .custom-link {
+        color: #4887fd;
+        text-decoration: none;
+      }
+      .custom-link:hover {
+        color: #2e70ff;
+        text-decoration: underline;
+      }
+
+      /* итог: курсор для всех интерактивных областей */
+      .tool-btn,
+      .tool-btn *,
+      .lang-switch,
+      #langWrapper,
+      .btn {
+        cursor: pointer;
+      }
+      .page {
+        position: relative;
+        z-index: 1;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 80px;
+        transform: scale(1.25);
+        transform-origin: top center;
       }
     </style>
   </head>
@@ -502,7 +564,7 @@
       </section>
 
       <section class="stack">
-        <h2 data-ru="Стек инструментов" data-en="Tools &amp; Technologies">
+        <h2 data-ru="Stack" data-en="Tools &amp; Technologies">
           Стек инструментов
         </h2>
 
