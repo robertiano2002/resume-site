@@ -18,10 +18,9 @@
     />
     <style>
       :root {
-        /* Позиция плавающего тоггла внутри .page (изменяйте при необходимости) */
-        --lang-top: 160px;
-        --lang-right: 155px;
-
+        --lang-top: 200px;
+        --lang-right: 865px;
+        --lang-scale: 1;
         --bg: #0f172a;
         --text: #e5e7eb;
         --muted: #cbd5e1;
@@ -33,6 +32,7 @@
         height: 100%;
         margin: 0;
       }
+
       body {
         font-family:
           "Manrope",
@@ -47,7 +47,6 @@
         overflow-x: hidden;
       }
 
-      /* canvas background (network) */
       canvas#bgCanvas {
         position: fixed;
         inset: 0;
@@ -63,15 +62,15 @@
         );
       }
 
-      /* page content */
       .page {
-        position: relative; /* важно: .lang-wrapper будет абсолютно позиционироваться относительно .page */
+        position: relative;
         z-index: 1;
         max-width: 1100px;
         margin: 0;
         padding: 80px;
-        transform: scale(1.2); /* 1.0 = 100%, 1.2 = 120% */
-        transform-origin: top left; /* откуда начинается масштабирование */
+        transform: scale(1.2);
+        transform-origin: top left;
+        padding-left: 300px;
       }
 
       h1 {
@@ -79,6 +78,7 @@
         margin: 0 0 18px 0;
         line-height: 1.02;
       }
+
       p.lead {
         color: var(--muted);
         max-width: 680px;
@@ -93,6 +93,7 @@
         flex-wrap: wrap;
         margin-top: 10px;
       }
+
       .btn {
         display: inline-flex;
         align-items: center;
@@ -112,9 +113,9 @@
           transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1),
           box-shadow 0.28s,
           background 0.28s;
-        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
       }
+
       .btn::before {
         content: "";
         position: absolute;
@@ -132,14 +133,17 @@
         transition: left 0.65s cubic-bezier(0.2, 0.9, 0.2, 1);
         pointer-events: none;
       }
+
       .btn:hover::before {
         left: 140%;
       }
+
       .btn:hover {
         transform: translateY(-6px) scale(1.02);
         box-shadow: 0 18px 60px rgba(20, 184, 166, 0.22);
         background: rgba(255, 255, 255, 0.1);
       }
+
       .btn::after {
         content: "";
         position: absolute;
@@ -150,6 +154,7 @@
         transition: opacity 0.28s;
         pointer-events: none;
       }
+
       .btn:hover::after {
         opacity: 1;
       }
@@ -159,89 +164,140 @@
         position: relative;
         z-index: 1;
       }
+
       h2 {
         font-size: 1.15rem;
         margin: 0 0 12px 0;
         color: #e6eef0;
       }
+
       ul {
         margin: 0 0 0 18px;
         color: var(--muted);
       }
 
-      /* tool list */
+      .limited-line {
+        max-width: 65ch;
+        line-height: 1.6;
+        color: var(--muted);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        word-wrap: break-word;
+      }
+
       .tool-list {
         display: flex;
         flex-direction: column;
         gap: 12px;
         margin-top: 0;
-        max-width: 600px;
+        max-width: 00px;
       }
+
       .tool-item {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 8px;
       }
 
-      /* === Здесь: tool-btn теперь на button, но стиль прежний === */
       .tool-btn {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 16px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 18px 16px;
+        border-radius: 10px;
+        width: 400px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         color: var(--text);
         font-weight: 600;
         cursor: pointer;
         transition:
           transform 0.18s,
-          box-shadow 0.18s;
+          box-shadow 0.18s,
+          background 0.18s;
       }
+
       .tool-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(20, 184, 166, 0.12);
-        background: rgba(255, 255, 255, 0.045);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(20, 184, 166, 0.12);
+        background: rgba(255, 255, 255, 0.06);
       }
+
       .dropdown {
-        overflow: hidden;
+        margin-top: 6px;
+        width: 370px;
         max-height: 0;
         opacity: 0;
-        transform-origin: top;
+        overflow: hidden;
+        z-index: 1;
         transition:
-          max-height 0.34s ease,
-          opacity 0.24s ease,
-          padding 0.24s ease;
-        background: rgba(7, 10, 18, 0.95);
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          padding 0.3s ease;
+        background: rgba(255, 255, 255, 0.04);
         border-radius: 10px;
-        padding: 0 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
         color: var(--muted);
-        border: 1px solid rgba(255, 255, 255, 0.02);
       }
+
       .tool-item.open .dropdown {
-        max-height: 160px;
+        max-height: 400px;
         opacity: 1;
         padding: 10px 14px;
       }
 
+      .dropdown-arrows .arrow-down {
+        display: inline;
+      }
+
+      .dropdown-arrows .arrow-up {
+        display: none;
+      }
+
+      .tool-item.open .dropdown-arrows .arrow-down {
+        display: none;
+      }
+
+      .tool-item.open .dropdown-arrows .arrow-up {
+        display: inline;
+      }
+
       .contacts {
-        margin-top: 28px;
+        /* убираем margin-top: -1190px; */
+        position: absolute; /* или fixed, если хотите, чтобы контакт всегда был виден независимо от родителя/скролла */
+        top: 200px; /* подберите значение под вашу верстку */
+        right: 300px; /* сохраняем ваш отступ справа */
+        margin-top: 0;
+        z-index: 900; /* выше основного контента, ниже canvas если нужно */
         padding: 18px;
         border-radius: 12px;
         background: linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0.02),
-          rgba(255, 255, 255, 0.01)
+          rgba(255, 255, 255, 0.22),
+          rgba(255, 255, 255, 0.08)
         );
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        /* Сохранил оригинальное поведение позиционирования, но сделал адаптивным ниже */
-        position: fixed;
-        bottom: 1220px;
-        right: 160px;
-        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.3);
         max-width: 300px;
       }
+
+      .lang-wrapper {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .contact-list {
+        margin-bottom: 18px;
+      }
+
       .contacts .btn {
         min-width: 140px;
         padding: 12px 28px;
@@ -257,78 +313,51 @@
         position: relative;
       }
 
-      @media (max-width: 640px) {
-        .page {
-          padding: 40px;
-        }
-        .btn {
-          min-width: 150px;
-          padding: 12px 28px;
-          font-size: 0.95rem;
-        }
-        .tool-list {
-          max-width: 100%;
-        }
-        /* сделать contacts не фиксированными на мобильных, чтобы не улетали */
-        .contacts {
-          position: static;
-          bottom: auto;
-          right: auto;
-          max-width: 100%;
-        }
-      }
-
-      .hero-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-        max-width: 900px;
-      }
-
-      /* -------- Floating language widget (anchored inside .page) -------- */
-      .lang-wrapper {
-        position: absolute; /* ключ: привязка к .page */
-        top: var(--lang-top);
-        right: var(--lang-right);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        z-index: 3;
-        -webkit-tap-highlight-color: transparent;
-        will-change: auto;
-        transform: none;
-      }
-
       .lang-text {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--muted);
-        user-select: none;
-        pointer-events: none;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       }
 
       .lang-switch {
         position: relative;
-        width: 70px;
+        width: 60px;
+        cursor: pointer;
         height: 36px;
-        flex-shrink: 0;
-        transition: box-shadow 0.3s ease;
+        display: inline-block;
+        vertical-align: middle;
       }
 
       .lang-switch .slider {
-        position: absolute;
-        inset: 0;
-        background: #1e293b;
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.06);
         border-radius: 999px;
-        border: 1px solid rgba(203, 213, 225, 0.15);
-        cursor: pointer;
-        transition:
-          background 0.25s ease,
-          box-shadow 0.25s ease;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-sizing: border-box;
       }
 
-      /* make input cover the whole switch, easier for accessibility */
+      .lang-switch .slider::before {
+        content: "";
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        top: 4px;
+        left: 2px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(149, 13, 234, 0.292);
+        transition: transform 0.25s ease;
+        transform: translateX(0);
+      }
+
+      .lang-switch input:checked + .slider::before {
+        transform: translateX(28px);
+      }
+
       .lang-switch input {
         position: absolute;
         left: 0;
@@ -338,24 +367,9 @@
         opacity: 0;
         margin: 0;
         cursor: pointer;
-      }
-
-      .lang-switch .slider::before {
-        content: "";
-        position: absolute;
-        height: 28px;
-        width: 28px;
-        left: 4px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: white;
-        border-radius: 50%;
-        box-shadow: 0 4px 10px rgba(149, 13, 234, 0.292);
-        transition: transform 0.25s ease;
-      }
-
-      .lang-switch input:checked + .slider::before {
-        transform: translate(32px, -50%);
+        min-width: 44px;
+        min-height: 44px;
+        padding: 6px;
       }
 
       .lang-switch:hover .slider {
@@ -364,62 +378,67 @@
           0 0 4px rgba(122, 21, 246, 0.6) inset;
       }
 
-      /* dropdown arrows */
-      .dropdown-arrows {
-        display: inline-flex;
-        margin-left: 12px;
-        align-items: center;
-        justify-content: center;
-        width: 22px;
-        height: 22px;
-        color: var(--muted);
-        font-size: 0.9rem;
-        line-height: 1;
-      }
-      .arrow-up,
-      .arrow-down {
-        transition:
-          opacity 0.12s ease,
-          transform 0.12s ease;
-        display: inline-block;
-      }
-      .arrow-up {
-        display: none;
-      }
-      .arrow-down {
-        display: inline-block;
-      }
-      .tool-item.open .arrow-down {
-        display: none;
-      }
-      .tool-item.open .arrow-up {
-        display: inline-block;
+      .custom-link {
+        color: #1261f3;
+        text-decoration: none;
       }
 
-      .tool-btn[aria-expanded="true"] {
-        box-shadow: 0 10px 30px rgba(20, 184, 166, 0.06);
+      .custom-link:hover {
+        color: #2e70ff;
+        text-decoration: underline;
       }
 
-      /* focus-visible */
       .lang-switch input:focus-visible + .slider {
-        box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.08);
+        box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.08);
         outline: none;
       }
-      .limited-line {
-        max-width: 65ch;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        line-height: 1.6;
-        margin-bottom: 1em;
-        color: var(--muted);
-      }
-      a[href^="mailto:"] {
-        color: #d256dd; /* или любой другой цвет, например: white, red, #00ffcc */
-        text-decoration: underline; /* по желанию: underline, none, etc. */
+
+      #langWrapper {
+        position: fixed;
+        z-index: 9999;
+        pointer-events: auto;
+        transition:
+          top 0.12s ease,
+          left 0.12s ease;
+        will-change: top, left;
       }
 
-      a[href^="mailto:"]:hover {
-        color: #e47cee; /* цвет при наведении */
+      @media (max-width: 640px) {
+        .page {
+          padding: 40px;
+        }
+
+        .btn {
+          min-width: 150px;
+          padding: 12px 28px;
+          font-size: 0.95rem;
+        }
+
+        .tool-list {
+          max-width: 100%;
+        }
+
+        .contacts {
+          position: static;
+          margin-top: 40px;
+          max-width: 100%;
+          line-height: 2;
+        }
+
+        .lang-switch {
+          width: clamp(46px, 12vw, 70px);
+          height: clamp(34px, 6.5vw, 36px);
+        }
+
+        #langWrapper {
+          position: static;
+          transform: none;
+        }
+
+        .dropdown {
+          position: static;
+          width: 100%;
+        }
       }
     </style>
   </head>
@@ -432,40 +451,17 @@
       style="width: 2133px; height: 1058px"
     ></canvas>
 
-    <main class="page" role="main" aria-label="Основной контент">
-      <!-- Floating language toggle placed INSIDE .page so it scrolls/scales with it -->
-      <div
-        class="lang-wrapper"
-        id="langWrapper"
-        role="region"
-        aria-label="Language switch area"
-      >
-        <span class="lang-text" id="label-ru">RU</span>
-        <label class="lang-switch" aria-hidden="false">
-          <input
-            type="checkbox"
-            id="langToggle"
-            role="switch"
-            aria-checked="false"
-            aria-labelledby="label-ru label-en"
-          />
-          <span class="slider" aria-hidden="true"></span>
-        </label>
-        <span class="lang-text" id="label-en">EN</span>
-      </div>
+    <!-- Language toggle: НОТА БЕНЕ — скрипт ниже переместит этот элемент в корень <body>, если он случайно окажется внутри .page -->
 
+    <main class="page" role="main" aria-label="Основной контент">
       <section class="hero" aria-labelledby="title">
         <div class="hero-header">
-          <!-- title: ru/en -->
           <h1 id="title" data-ru="QA Engineer" data-en="QA Engineer">
             QA Engineer
           </h1>
-
-          <!-- spacer: toggle moved to floating widget -->
           <div style="width: 70px" aria-hidden="true"></div>
         </div>
 
-        <!-- subtitle -->
         <p
           class="lead"
           id="subtitle"
@@ -473,29 +469,6 @@
           data-en="Driven by Details. Focused on Quality."
         >
           Driven by Details. Focused on Quality.
-        </p>
-      </section>
-
-      <section class="about">
-        <h2 data-ru="Обо мне" data-en="About me">Обо мне</h2>
-
-        <p
-          class="limited-line"
-          data-ru="Моя философия — системный подход к развитию. Уровень качества можно оценить не только по состоянию продукта, но и по подходу к его планированию и реализации."
-          data-en="My philosophy is a systematic approach to product quality. Quality is judged not only by product state but by planning and implementation."
-        >
-          Моя философия — системный подход к развитию. Уровень качества можно
-          оценить не только по состоянию продукта, но и по подходу к его
-          планированию и реализации.
-        </p>
-
-        <p
-          class="limited-line"
-          data-ru="Задачей QA не может являться лишь решение текущих проблем, но и проактивная деятельность и превентивное устранение."
-          data-en="QA's role is not only to fix current issues but to work proactively, preventing problems before they appear."
-        >
-          Задачей QA не может являться лишь решение текущих проблем, но и
-          проактивная деятельность и превентивное устранение.
         </p>
       </section>
 
@@ -536,7 +509,6 @@
         <div class="tool-list" id="toolList">
           <!-- API testing -->
           <div class="tool-item">
-            <!-- заменил div на button — семантика улучшена, стиль тот же -->
             <button
               class="tool-btn"
               type="button"
@@ -549,10 +521,10 @@
                 data-en="API testing"
                 >API тестирование</span
               >
-              <span class="dropdown-arrows"
-                ><span class="arrow-down">▼</span
-                ><span class="arrow-up">▲</span></span
-              >
+              <span class="dropdown-arrows">
+                <span class="arrow-down">▼</span>
+                <span class="arrow-up">▲</span>
+              </span>
             </button>
 
             <div
@@ -592,7 +564,7 @@
             </div>
           </div>
 
-          <!-- Test Management -->
+          <!-- остальные tool-item'ы сохранены -->
           <div class="tool-item">
             <button
               class="tool-btn"
@@ -643,7 +615,6 @@
             </div>
           </div>
 
-          <!-- Traffic analysis -->
           <div class="tool-item">
             <button
               class="tool-btn"
@@ -694,7 +665,6 @@
             </div>
           </div>
 
-          <!-- Databases -->
           <div class="tool-item">
             <button
               class="tool-btn"
@@ -735,7 +705,6 @@
             </div>
           </div>
 
-          <!-- Messaging / Kafka -->
           <div class="tool-item">
             <button
               class="tool-btn"
@@ -894,7 +863,25 @@
           </li>
         </ul>
       </section>
-
+      <div
+        class="lang-wrapper"
+        id="langWrapper"
+        role="region"
+        aria-label="Language switch area"
+      >
+        <span class="lang-text" id="label-ru">RU</span>
+        <label class="lang-switch" aria-hidden="false">
+          <input
+            type="checkbox"
+            id="langToggle"
+            role="switch"
+            aria-checked="false"
+            aria-labelledby="label-ru label-en"
+          />
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+        <span class="lang-text" id="label-en">EN</span>
+      </div>
       <section class="contacts" aria-label="Контакты">
         <h2 data-ru="Контакты" data-en="Contacts">Контакты</h2>
 
@@ -946,15 +933,11 @@
           >
         </div>
       </section>
-
-      <footer data-ru="© Роберт, QA Engineer" data-en="© Robert, QA Engineer">
-        © Роберт, QA Engineer
-      </footer>
     </main>
 
     <script>
       (function () {
-        // ========== Canvas (оригинальная логика) + оптимизации ==========
+        // ========== Canvas (частицы) ==========
         const canvas = document.getElementById("bgCanvas");
         const ctx = canvas.getContext("2d", { alpha: true });
         let DPR = Math.max(window.devicePixelRatio || 1, 1),
@@ -962,22 +945,19 @@
           H = 0;
         const BASE_PARTICLES = 80,
           MAX_DISTANCE = 160,
-          PARTICLE_SIZE = 1.4,
-          REPULSE_RADIUS = 120,
+          PARTICLE_SIZE = 1.4;
+        const REPULSE_RADIUS = 120,
           REPULSE_FORCE = 0.12;
         let particles = [];
         const mouse = { x: null, y: null, active: false };
-
-        let rafId = null;
-        let lastFrame = 0;
-        let resizeTimeout = null;
+        let rafId = null,
+          resizeTimeout = null;
 
         function rand(min, max) {
           return Math.random() * (max - min) + min;
         }
 
         function resize() {
-          // debounce resize to avoid frequent reinit on mobile resize/rotate
           if (resizeTimeout) clearTimeout(resizeTimeout);
           resizeTimeout = setTimeout(() => {
             DPR = Math.max(window.devicePixelRatio || 1, 1);
@@ -1017,15 +997,12 @@
         }
 
         function step(t) {
-          // basic frame rate safeguard: limit to <= 60fps implicitly by requestAnimationFrame
           ctx.clearRect(0, 0, W, H);
-
           for (let i = 0; i < particles.length; i++) {
             const p = particles[i];
             p.x += p.vx;
             p.y += p.vy;
             autoMove(p, t);
-
             if (p.x < -10) p.x = W + 10;
             if (p.x > W + 10) p.x = -10;
             if (p.y < -10) p.y = H + 10;
@@ -1063,7 +1040,7 @@
                   const mx = a.x - mouse.x,
                     my = a.y - mouse.y;
                   const md2 = mx * mx + my * my;
-                  if (md2 < REPULSE_RADIUS * 1.2 * (REPULSE_RADIUS * 1.2))
+                  if (md2 < REPULSE_RADIUS * 1.2 * REPULSE_RADIUS * 1.2)
                     alpha = Math.min(1, alpha + 0.15);
                 }
                 ctx.strokeStyle = `rgba(20,184,166,${(alpha * 0.28).toFixed(3)})`;
@@ -1075,7 +1052,6 @@
               }
             }
           }
-
           rafId = requestAnimationFrame(step);
         }
 
@@ -1084,17 +1060,17 @@
           mouse.y = e.clientY;
           mouse.active = true;
         }
+
         function onLeave() {
           mouse.x = null;
           mouse.y = null;
           mouse.active = false;
         }
 
-        // event listeners with passive where appropriate
         window.addEventListener("mousemove", onMove, { passive: true });
         window.addEventListener(
           "touchmove",
-          function (e) {
+          (e) => {
             if (e.touches && e.touches[0]) {
               mouse.x = e.touches[0].clientX;
               mouse.y = e.touches[0].clientY;
@@ -1106,22 +1082,17 @@
         window.addEventListener("touchend", onLeave, { passive: true });
         window.addEventListener("mouseleave", onLeave, { passive: true });
 
-        // respect prefers-reduced-motion
         const reducedMotion = window.matchMedia(
           "(prefers-reduced-motion: reduce)",
         ).matches;
-
         if (!reducedMotion) {
           window.addEventListener("resize", resize, { passive: true });
-          // start
           resize();
           rafId = requestAnimationFrame(step);
         } else {
-          // if reduced motion — draw static soft gradient only
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // pause animation when page hidden to save CPU
         document.addEventListener("visibilitychange", () => {
           if (document.hidden) {
             if (rafId) {
@@ -1135,10 +1106,10 @@
           }
         });
 
-        // ========== Tool dropdown logic (semantics + keyboard access) ==========
+        // ========== Dropdown ==========
+
         const toolList = document.getElementById("toolList");
 
-        // helper: close all
         function closeAllTools() {
           document.querySelectorAll(".tool-item.open").forEach((it) => {
             it.classList.remove("open");
@@ -1146,10 +1117,8 @@
             if (tb) {
               tb.setAttribute("aria-expanded", "false");
               const id = tb.getAttribute("aria-controls");
-              if (id) {
-                const panel = document.getElementById(id);
-                if (panel) panel.setAttribute("aria-hidden", "true");
-              }
+              const panel = id && document.getElementById(id);
+              if (panel) panel.setAttribute("aria-hidden", "true");
             }
           });
         }
@@ -1157,28 +1126,24 @@
         if (toolList) {
           toolList.addEventListener(
             "click",
-            function (e) {
+            (e) => {
               const btn = e.target.closest(".tool-btn");
               if (!btn) return;
               const item = btn.parentElement;
               const wasOpen = item.classList.contains("open");
-              // close all
               closeAllTools();
               if (!wasOpen) {
                 item.classList.add("open");
                 btn.setAttribute("aria-expanded", "true");
                 const id = btn.getAttribute("aria-controls");
-                if (id) {
-                  const panel = document.getElementById(id);
-                  if (panel) panel.setAttribute("aria-hidden", "false");
-                }
+                const panel = id && document.getElementById(id);
+                if (panel) panel.setAttribute("aria-hidden", "false");
               }
             },
             { passive: true },
           );
 
-          // keyboard support: Enter/Space to toggle, Esc to close
-          toolList.addEventListener("keydown", function (e) {
+          toolList.addEventListener("keydown", (e) => {
             const btn = e.target.closest(".tool-btn");
             if (!btn) return;
             if (e.key === "Enter" || e.key === " ") {
@@ -1191,41 +1156,74 @@
           });
         }
 
-        // close when click outside tool-list
-        document.addEventListener("click", function (e) {
-          if (e.target.closest(".tool-list")) return;
-          closeAllTools();
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest(".tool-list")) {
+            closeAllTools();
+          }
         });
 
-        // ========== Language toggle (kept as checkbox for visuals, but improved semantics) ==========
+        // ========== Language toggle ==========
         (function () {
           const langToggle = document.getElementById("langToggle");
-          const translatableNodes =
-            document.querySelectorAll("[data-ru][data-en]");
-
+          const translatable = document.querySelectorAll("[data-ru][data-en]");
           if (!langToggle) return;
 
-          function applyLanguage(isEn) {
+          function applyLang(isEn) {
             document.documentElement.lang = isEn ? "en" : "ru";
-            translatableNodes.forEach((el) => {
+            translatable.forEach((el) => {
               el.textContent = isEn ? el.dataset.en : el.dataset.ru;
             });
             langToggle.setAttribute("aria-checked", isEn ? "true" : "false");
           }
 
-          // initial (unchecked -> ru)
-          applyLanguage(!!langToggle.checked);
-
-          // toggle handler
+          applyLang(!!langToggle.checked);
           langToggle.addEventListener("change", (e) => {
-            applyLanguage(e.target.checked);
+            applyLang(e.target.checked);
           });
-
-          // keyboard: ensure space/enter toggles (checkbox native handles it) but keep role= switch in markup
         })();
 
-        // ========== misc: guard on non-existent element and removed buggy lineLimited code ==========
-        // (в исходнике был код, который использовал элемент с id="lineLimited" — его нет в текущем DOM)
+        // ========== Позиционирование тоггла ==========
+        (function positionLangToggleAboveContactsOnce() {
+          const wrapper = document.getElementById("langWrapper");
+          const contacts = document.querySelector(".contacts");
+          if (!wrapper || !contacts) return;
+
+          if (wrapper.parentElement !== document.body) {
+            document.body.appendChild(wrapper);
+          }
+
+          wrapper.style.display = "flex";
+          wrapper.style.alignItems = "center";
+          wrapper.style.position = "fixed";
+          wrapper.style.zIndex = 9999;
+          wrapper.style.pointerEvents = "auto";
+          wrapper.style.transition = "opacity 0.2s ease";
+
+          function updatePositionAndVisibility() {
+            const rect = contacts.getBoundingClientRect();
+            const w = wrapper.offsetWidth;
+            const h = wrapper.offsetHeight;
+            const top = rect.top - h - 20;
+            const left = rect.left;
+
+            wrapper.style.top = `${top}px`;
+            wrapper.style.left = `${left}px`;
+
+            const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+            wrapper.style.opacity = visible ? "1" : "0";
+            wrapper.style.pointerEvents = visible ? "auto" : "none";
+          }
+
+          window.addEventListener("scroll", updatePositionAndVisibility, {
+            passive: true,
+          });
+          window.addEventListener("resize", updatePositionAndVisibility, {
+            passive: true,
+          });
+          window.addEventListener("load", () =>
+            setTimeout(updatePositionAndVisibility, 80),
+          );
+        })();
       })();
     </script>
   </body>
