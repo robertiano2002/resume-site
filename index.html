@@ -30,11 +30,17 @@
 
       html,
       body {
-        height: 100%;
+        min-height: 100%;
         margin: 0;
       }
 
       body {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* центрирует по горизонтали */
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
         font-family:
           "Manrope",
           system-ui,
@@ -46,6 +52,7 @@
         background: var(--bg);
         color: var(--text);
         overflow-x: hidden;
+        overflow-y: auto;
       }
 
       /* canvas background (network) */
@@ -266,23 +273,23 @@
 
       /* ========== contacts (с сохранением позиционирования) ========== */
       .contacts {
-        position: absolute; /* ВЕРНУЛ на место */
-        top: 80px; /* Поставь нужную высоту от верха */
-        right: 210px;
+        margin-top: -1140px;
         padding: 18px;
         border-radius: 12px;
         background: linear-gradient(
           180deg,
-          rgba(255, 255, 255, 0.12),
-          rgba(255, 255, 255, 0.05)
+          rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.01)
         );
-        border: 1px solid rgba(255, 255, 255, 0.26);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         max-width: 300px;
+        margin-left: auto;
+        margin-right: 210px;
 
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+        /* дополнительные визуальные улучшения, не влияющие на позицию */
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(8px);
         color: #f8fafc;
-        transition: all 0.28s ease;
+        transition: all 0.3s ease;
       }
 
       .lang-wrapper {
@@ -421,10 +428,9 @@
         will-change: top, left;
         cursor: pointer;
       }
-      .lang-switch:hover .slider {
-        box-shadow:
-          0 0 12px rgba(119, 2, 137),
-          0 0 4px rgba(122, 21, 246, 0.6) inset;
+      #langWrapper:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 24px rgba(20, 184, 166, 0.7);
       }
 
       /* ========== responsive (только масштаб/доступность, без перестановки элементов) ========== */
@@ -494,13 +500,12 @@
         cursor: pointer;
       }
       .page {
-        position: relative;
-        z-index: 1;
+        width: 100%;
         max-width: 1100px;
-        margin: 0 auto;
         padding: 80px;
         transform: scale(1.25);
         transform-origin: top center;
+        padding-bottom: 800px;
       }
     </style>
   </head>
